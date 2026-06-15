@@ -45,7 +45,7 @@
   --dot-size: 28px;
 }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: auto; }
 
 body {
   font-family: var(--font);
@@ -977,7 +977,7 @@ a.tag:hover {
   <header class="audit-header">
     <span class="audit-label">UX Audit · Security Screen</span>
     <h1 class="audit-title">Анализ UX проблем</h1>
-    <p class="audit-subtitle">UX-аудит шести экранов DBeaver Ultimate: главный экран Security, Eclipse Secure Storage Viewer, Advanced и трёхшаговый wizard смены мастер-пароля. Найдено 30 проблем трёх уровней важности — от блокеров до минорных.</p>
+    <p class="audit-subtitle">Найдены проблемы трёх уровней важности — от блокеров до минорных. Для редизайна сосредоточилась на 10 ключевых, которые напрямую влияют на основной пользовательский сценарий: настроить защиту credentials и вернуться к работе. Дополнительно провела аудит и предложила редизайн для флоу Change Password — трёхшагового wizard с двумя пустыми экранами</p>
   </header>
 
   <div class="hairline"></div>
@@ -1033,6 +1033,7 @@ a.tag:hover {
 </div>
 
 <script>
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 const SEVERITY = {
   critical: { color: '#EA0000', label: 'CRITICAL' },
   major:    { color: '#FF8018', label: 'MAJOR' },
@@ -1043,7 +1044,7 @@ const SECTIONS = [
   {
     id: 1,
     number: '01',
-    label: '01 — ЭКРАН',
+    label: '01. ЭКРАН',
     name: 'Security',
     desc: 'Preferences → General → Security. Главный экран настройки безопасности в DBeaver Ultimate. Цветные точки на скриншоте — найденные проблемы с указанием уровня важности.',
     image: 'dbeaver-ux-audit-assets/01-security.png',
@@ -1052,7 +1053,7 @@ const SECTIONS = [
   {
     id: 2,
     number: '02',
-    label: '02 — ЭКРАН',
+    label: '02. ЭКРАН',
     name: 'See what secured data was saved',
     desc: 'Что открывается при клике «See what secured data was saved» — Eclipse Secure Storage Viewer. Технический экран Eclipse, выведенный наружу без адаптации под пользователей DBeaver.',
     image: 'dbeaver-ux-audit-assets/02-saved-data.png',
@@ -1065,7 +1066,7 @@ const SECTIONS = [
   {
     id: 3,
     number: '03',
-    label: '03 — ЭКРАН',
+    label: '03. ЭКРАН',
     name: 'Advanced',
     desc: 'Экран продвинутых настроек Eclipse Secure Storage. Служебный интерфейс Eclipse Equinox для разработчиков плагинов — не для конечных пользователей DBeaver.',
     image: 'dbeaver-ux-audit-assets/03-advanced.png',
@@ -1074,7 +1075,7 @@ const SECTIONS = [
   {
     id: 4,
     number: '04',
-    label: '04 — ФЛОУ · CHANGE PASSWORD · STEP 1',
+    label: '04. ФЛОУ · CHANGE PASSWORD · STEP 1',
     name: 'Change Password · Step 1',
     desc: 'Первый шаг wizard смены мастер-пароля. Старого пароля у пользователя нет, но wizard говорит «decrypting with old master password».',
     image: 'dbeaver-ux-audit-assets/04-change-password-1.png',
@@ -1083,7 +1084,7 @@ const SECTIONS = [
   {
     id: 5,
     number: '05',
-    label: '05 — ФЛОУ · CHANGE PASSWORD · STEP 2',
+    label: '05. ФЛОУ · CHANGE PASSWORD · STEP 2',
     name: 'Change Password · Step 2',
     desc: 'Второй шаг wizard. Пояснительный текст без действия — пользователь жмёт Next, не сделав ничего.',
     image: 'dbeaver-ux-audit-assets/05-change-password-2.png',
@@ -1092,9 +1093,9 @@ const SECTIONS = [
   {
     id: 6,
     number: '06',
-    label: '06 — ФЛОУ · CHANGE PASSWORD · STEP 3',
+    label: '06. ФЛОУ · CHANGE PASSWORD · STEP 3',
     name: 'Change Password · Step 3',
-    desc: 'Третий шаг — собственно ввод нового пароля. Появляется поверх предыдущих двух модальных окон без объяснения требований к паролю.',
+    desc: 'Третий шаг — ввод нового пароля. Появляется поверх предыдущих двух модальных окон без объяснения требований к паролю.',
     image: 'dbeaver-ux-audit-assets/06-change-password-3.png',
     caption: 'Change Master Password Wizard · Step 3 of 3'
   }
@@ -1287,7 +1288,7 @@ const FINDINGS = [
 
   // ─── Screen 5: Change Password Step 2 ───
   {
-    id: 23, section: 5, displayNum: '2', severity: 'major',
+    id: 23, section: 5, displayNum: '3', severity: 'major',
     x: 48, y: 58,
     title: 'Шаг без действия',
     desc: 'Та же проблема, что и на Step 1: только пояснительный текст, никакого ввода или решения. Wizard превращается в обёртку.',
@@ -1296,21 +1297,21 @@ const FINDINGS = [
 
   // ─── Screen 6: Change Password Step 3 ───
   {
-    id: 24, section: 6, displayNum: '3', severity: 'critical',
+    id: 24, section: 6, displayNum: '4', severity: 'critical',
     x: 38, y: 37,
     title: 'Нет индикатора сложности пароля',
     desc: 'Password + Confirm Password без password strength indicator. Администратор может задать политику (минимальная длина, символы, mixed case), но пользователь требований не видит — узнаёт их через ошибку валидации.',
     tags: []
   },
   {
-    id: 25, section: 6, displayNum: '4', severity: 'major',
+    id: 25, section: 6, displayNum: '5', severity: 'major',
     x: 75, y: 17,
     title: 'Три слоя модальных окон',
     desc: 'Preferences → Wizard (Step 2 виден за диалогом) → Set password dialog. Пользователь видит три слоя одновременно, каждый со своим набором кнопок. Потеря контекста. NN/g: «Stacking modals compounds the interruption.»',
     tags: []
   },
   {
-    id: 26, section: 6, displayNum: '5', severity: 'major',
+    id: 26, section: 6, displayNum: '6', severity: 'major',
     x: 27, y: 44,
     title: 'Объяснение ценности — на 3-м уровне (нарушена иерархия)',
     desc: '«Set master password to save secure information» — единственное место во всём интерфейсе, где объясняется зачем нужен мастер-пароль. Лежит внутри модального окна внутри wizard внутри Preferences. Влияние: пользователь не понимает ценность фичи до момента, когда уже решил ей воспользоваться.',
@@ -1733,7 +1734,7 @@ function renderSolutions() {
     <header class="solutions-header">
       <span class="audit-label">Design Solutions</span>
       <h2 class="audit-title">Дизайн-решения и обоснования</h2>
-      <p class="audit-subtitle">Редизайн решает 10 проблем на основном экране Security — 6 критичных, 3 значимых и 1 минорную. Остальные проблемы относятся к вложенным экранам (Change Password wizard, Eclipse Secure Storage Viewer) и платформенным ограничениям Eclipse RCP. Для них даны отдельные рекомендации с обоснованиями и ссылками на документацию, но их реализация выходит за рамки редизайна одного экрана Preferences и требует отдельных задач разработки. Каждое решение обосновано пользовательским исследованием, тикетами GitHub и документацией.</p>
+      <p class="audit-subtitle">Редизайн решает 10 проблем на основном экране Security — 6 критичных, 3 значимых и 1 минорную. Помимо структурных изменений, предложены новые тексты интерфейса (UX writing): описания методов шифрования, пояснения к кнопкам, предупреждения о последствиях действий — чтобы пользователь понимал что происходит на каждом шаге с минимальным обращением к документации. Остальные проблемы относятся к вложенным экранам (Change Password wizard, Eclipse Secure Storage Viewer) и платформенным ограничениям Eclipse RCP. Для них даны отдельные рекомендации с обоснованиями и ссылками на документацию, но их реализация выходит за рамки редизайна одного экрана Preferences и требует отдельных задач разработки. Каждое решение обосновано пользовательским исследованием, тикетами GitHub и документацией.</p>
       <div class="solutions-metrics">
         <div class="metric">
           <div class="metric-value critical">6</div>
@@ -1978,6 +1979,7 @@ window.addEventListener('scroll', () => {
   <p class="footer-name">Анастасия Покатилова</p>
   <div class="footer-links">
     <a href="https://t.me/epic_amber" target="_blank" rel="noopener">Telegram ↗</a>
+    <a href="https://www.linkedin.com/in/a-pokatilova/" target="_blank" rel="noopener">LinkedIn ↗</a>
     <a href="https://a-pokatilova.space/" target="_blank" rel="noopener">Портфолио ↗</a>
   </div>
 </footer>
