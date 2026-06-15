@@ -1,0 +1,1993 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UX Audit — DBeaver Security</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg-page: #141414;
+  --bg-card: #1E1E1E;
+  --bg-card-hover: #252525;
+  --border-subtle: rgba(255,255,255,0.08);
+  --border-medium: rgba(255,255,255,0.12);
+  --text-primary: #F5F5F5;
+  --text-secondary: rgba(255,255,255,0.6);
+  --text-muted: rgba(255,255,255,0.35);
+  --critical: #EA0000;
+  --critical-bg: rgba(234,0,0,0.08);
+  --major: #FF8018;
+  --major-bg: rgba(255,128,24,0.08);
+  --minor: #FACC15;
+  --minor-bg: rgba(250,204,21,0.08);
+  --tag-bg: rgba(255,255,255,0.04);
+  --tag-border: rgba(255,255,255,0.10);
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --max-width: 1200px;
+  --dot-size: 28px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg-page);
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ─── Hero ─── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 48px 24px;
+  position: relative;
+}
+.hero h1 { font-size: 40px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; }
+.hero .author { font-size: 16px; color: var(--text-secondary); margin-top: 16px; }
+.hero .link-brief { display: inline-block; font-size: 14px; color: #2C7BE5; margin-top: 12px; text-decoration: none; }
+.hero .link-brief:hover { text-decoration: underline; }
+.hero .description { max-width: 640px; font-size: 16px; color: var(--text-secondary); line-height: 1.7; margin-top: 32px; }
+.hero-actions { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 40px; }
+.hero-btn-primary, .hero-btn-secondary {
+  width: 100%; max-width: 360px; padding: 14px 28px;
+  border-radius: var(--radius-sm); font-family: var(--font);
+  font-size: 15px; cursor: pointer; text-decoration: none; text-align: center;
+  transition: background 0.15s, border-color 0.15s;
+}
+.hero-btn-primary {
+  background: #2C7BE5; color: #fff; border: none; font-weight: 600;
+}
+.hero-btn-primary:hover { background: #1a6ad4; }
+.hero-btn-secondary {
+  display: block; background: transparent; color: #fff; border: 1px solid #555; font-weight: 500;
+}
+.hero-btn-secondary:hover { border-color: #999; }
+.figma-tags { font-size: 12px; color: var(--text-muted); margin-top: -4px; }
+.scroll-hint {
+  position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+  font-size: 24px; opacity: 0.4; animation: bounce 2s infinite;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+.hero-note { font-size: 12px; color: var(--text-muted); margin-top: 24px; }
+
+/* ─── Header ─── */
+.audit-header {
+  padding: 80px 0 48px;
+}
+.audit-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+.audit-title {
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 20px;
+}
+.audit-subtitle {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: 820px;
+}
+
+/* ─── Hairline ─── */
+.hairline {
+  height: 1px;
+  background: var(--border-subtle);
+}
+
+/* ─── Legend ─── */
+.legend {
+  padding: 48px 0;
+}
+.legend-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+.legend-items {
+  display: flex;
+  gap: 0;
+}
+.legend-item {
+  flex: 1;
+}
+.legend-item-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.legend-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.legend-dot.critical { background: var(--critical); }
+.legend-dot.major { background: var(--major); }
+.legend-dot.minor { background: var(--minor); }
+.legend-name {
+  font-size: 15px;
+  font-weight: 600;
+}
+.legend-count {
+  font-size: 15px;
+  color: var(--text-muted);
+}
+.legend-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* ─── Section ─── */
+.audit-section {
+  padding: 60px 0 48px;
+}
+.section-header {
+  padding-bottom: 40px;
+}
+.section-number {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+.section-name {
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+.section-desc {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: 820px;
+}
+
+/* ─── Two-column layout ─── */
+.section-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+/* ─── Screenshot container ─── */
+.screenshot-wrap {
+  position: sticky;
+  top: 24px;
+}
+.screenshot-container {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: #000;
+}
+.screenshot-container img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.screenshot-caption {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 12px;
+}
+
+/* ─── Dots ─── */
+.dot {
+  position: absolute;
+  width: var(--dot-size);
+  height: var(--dot-size);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  z-index: 2;
+  user-select: none;
+  border: 2px solid rgba(255,255,255,0.25);
+}
+.dot:hover {
+  transform: translate(-50%, -50%) scale(1.15);
+  box-shadow: 0 0 0 4px rgba(255,255,255,0.15);
+}
+.dot.active {
+  transform: translate(-50%, -50%) scale(1.2);
+  box-shadow: 0 0 0 6px rgba(255,255,255,0.2);
+  z-index: 10;
+}
+.dot.critical { background: var(--critical); }
+.dot.major { background: var(--major); }
+.dot.minor { background: var(--minor); }
+
+@keyframes pulse-critical {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(234,0,0,0.5); }
+  50% { box-shadow: 0 0 0 8px rgba(234,0,0,0); }
+}
+.dot.critical:not(.active):not(:hover) {
+  animation: pulse-critical 2.5s ease-in-out infinite;
+}
+
+/* ─── Finding cards ─── */
+.findings-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.finding-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 20px 24px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+.finding-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-medium);
+}
+.finding-card.active {
+  border-color: var(--border-medium);
+  box-shadow: 0 0 0 1px var(--border-medium);
+}
+.finding-card.active.critical { border-color: rgba(234,0,0,0.4); box-shadow: 0 0 0 1px rgba(234,0,0,0.2); }
+.finding-card.active.major { border-color: rgba(255,128,24,0.4); box-shadow: 0 0 0 1px rgba(255,128,24,0.2); }
+.finding-card.active.minor { border-color: rgba(250,204,21,0.4); box-shadow: 0 0 0 1px rgba(250,204,21,0.2); }
+
+.finding-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.finding-num {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+.finding-num.critical { background: var(--critical); }
+.finding-num.major { background: var(--major); }
+.finding-num.minor { background: var(--minor); }
+.finding-severity {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.finding-severity.critical { color: var(--critical); }
+.finding-severity.major { color: var(--major); }
+.finding-severity.minor { color: var(--minor); }
+
+.finding-title {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+.finding-description {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+.finding-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 10px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  background: var(--tag-bg);
+  border: 1px solid var(--tag-border);
+  border-radius: 100px;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+a.tag:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--text-primary);
+}
+.tag-plain {
+  cursor: default;
+}
+
+/* ─── Note card (under screenshot) ─── */
+.note-card {
+  background: var(--critical-bg);
+  border: 1px solid rgba(234,0,0,0.15);
+  border-radius: var(--radius-md);
+  padding: 20px 24px;
+  margin-top: 16px;
+}
+.note-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.note-card-desc {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+/* ─── Tooltip ─── */
+.tooltip {
+  position: fixed;
+  z-index: 1000;
+  width: 340px;
+  max-width: calc(100vw - 32px);
+  background: #252525;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 4px 12px rgba(0,0,0,0.3);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  transform: translateY(8px);
+}
+.tooltip.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+.tooltip-arrow {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #252525;
+  border: 1px solid rgba(255,255,255,0.15);
+  transform: rotate(45deg);
+  z-index: -1;
+}
+.tooltip-arrow.top {
+  bottom: -7px;
+  border-top: none;
+  border-left: none;
+}
+.tooltip-arrow.bottom {
+  top: -7px;
+  border-bottom: none;
+  border-right: none;
+}
+.tooltip .finding-meta { margin-bottom: 8px; }
+.tooltip .finding-title { font-size: 15px; margin-bottom: 6px; }
+.tooltip .finding-description { font-size: 12px; margin-bottom: 12px; }
+.tooltip .finding-tags { gap: 4px; }
+.tooltip .tag { font-size: 10px; padding: 3px 8px; }
+
+/* ─── Solutions Section ─── */
+.solutions-header {
+  padding: 80px 0 48px;
+}
+.solutions-metrics {
+  display: flex;
+  gap: 32px;
+  margin-top: 32px;
+}
+.metric {
+  text-align: center;
+}
+.metric-value {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1;
+}
+.metric-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 6px;
+}
+.metric-value.critical { color: var(--critical); }
+.metric-value.major { color: var(--major); }
+.metric-value.minor { color: var(--minor); }
+
+/* Insight card */
+.insight-card {
+  margin-top: 40px;
+  padding: 28px 32px;
+  background: rgba(255,255,255,0.04);
+  border-left: 4px solid var(--major);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+.insight-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+.insight-card p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin: 0 0 12px;
+}
+.insight-card p:last-child {
+  margin-bottom: 0;
+  color: var(--text-primary);
+}
+
+/* Before/After */
+.ba-section { padding: 48px 0; }
+.ba-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+.ba-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: start;
+}
+.ba-col-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+.ba-img-wrap {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.ba-img-wrap img {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: zoom-in;
+}
+.ba-grid .ba-img-wrap img {
+  aspect-ratio: 1060 / 1051;
+  object-fit: cover;
+  object-position: top left;
+}
+/* Lightbox */
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(0,0,0,0.9);
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+  padding: 32px;
+}
+.lightbox.visible { display: flex; }
+.lightbox img {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+.ba-img-wrap .dot {
+  --dot-size: 22px;
+  font-size: 10px;
+  border-width: 1.5px;
+}
+
+/* Solution cards */
+.solution-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 20px 24px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  overflow: hidden;
+}
+.solution-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-medium);
+}
+.solution-card.active {
+  border-color: var(--border-medium);
+  box-shadow: 0 0 0 1px var(--border-medium);
+}
+.solution-card.active.critical { border-color: rgba(234,0,0,0.4); box-shadow: 0 0 0 1px rgba(234,0,0,0.2); }
+.solution-card.active.major { border-color: rgba(255,128,24,0.4); box-shadow: 0 0 0 1px rgba(255,128,24,0.2); }
+.solution-card.active.minor { border-color: rgba(250,204,21,0.4); box-shadow: 0 0 0 1px rgba(250,204,21,0.2); }
+.solution-before-after {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 12px 0 14px;
+}
+.solution-ba-block {}
+.solution-ba-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+.solution-ba-label.before { color: var(--text-muted); }
+.solution-ba-label.after { color: var(--text-primary); }
+.solution-ba-text {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Collapsible table */
+.solved-table-section { padding: 48px 0; }
+.solved-table-title {
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 700;
+  margin-bottom: 32px;
+}
+.severity-group { margin-bottom: 8px; }
+.severity-group-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s;
+}
+.severity-group-header:hover { background: var(--bg-card-hover); }
+.severity-group-header .chevron {
+  font-size: 14px;
+  color: var(--text-muted);
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+.severity-group.open .chevron { transform: rotate(90deg); }
+.severity-group-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.severity-group-dot.critical { background: var(--critical); }
+.severity-group-dot.major { background: var(--major); }
+.severity-group-dot.minor { background: var(--minor); }
+.severity-group-label {
+  font-size: 14px;
+  font-weight: 600;
+  flex: 1;
+}
+.severity-group-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+.severity-group.open .severity-group-body {
+  max-height: 2000px;
+}
+.solved-row {
+  display: grid;
+  grid-template-columns: 2fr 2fr 1.5fr;
+  gap: 1px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+.solved-row:last-child { border-bottom: none; }
+.solved-row-header {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  padding: 10px 20px;
+}
+
+/* Conclusion */
+.conclusion-section {
+  padding: 48px 0 80px;
+}
+.conclusion-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 48px;
+}
+.conclusion-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+.conclusion-text {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  max-width: 900px;
+}
+.conclusion-quote {
+  font-size: 15px;
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  border-left: 3px solid var(--border-medium);
+  padding-left: 20px;
+  margin-bottom: 32px;
+}
+.jobs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.job-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 20px;
+}
+.job-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+.job-desc {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+/* ─── Flow section ─── */
+.flow-screenshot { border-radius: var(--radius-md); overflow: hidden; background: #000; }
+.flow-screenshot img { display: block; width: 100%; height: auto; }
+.flow-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 32px;
+}
+.flow-step {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 20px 24px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.flow-step:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-medium);
+}
+.flow-step.active {
+  border-color: #22C55E;
+  box-shadow: 0 0 0 1px rgba(34,197,94,0.3);
+}
+.flow-step-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.flow-step-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: #22C55E;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.flow-step-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.flow-step-desc {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+.flow-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-top: 40px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 32px;
+}
+.flow-metric {
+  text-align: center;
+}
+.flow-metric-value {
+  font-size: clamp(36px, 5vw, 48px);
+  font-weight: 800;
+  color: #22C55E;
+  line-height: 1;
+}
+.flow-metric-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 8px;
+}
+.flow-conclusion {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 32px;
+  margin-top: 40px;
+}
+.flow-conclusion blockquote {
+  border-left: 3px solid var(--text-muted);
+  padding-left: 16px;
+  margin: 16px 0;
+  font-style: italic;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+.flow-conclusion p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+.flow-sources {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-subtle);
+}
+.flow-sources-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+.flow-sources a {
+  display: block;
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  margin-bottom: 4px;
+}
+.flow-sources a:hover { color: var(--text-primary); }
+
+/* ─── Scroll to top ─── */
+.scroll-top {
+  position: fixed;
+  right: 24px;
+  bottom: 32px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #fff;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s, background 0.15s;
+  z-index: 90;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.scroll-top.visible { opacity: 1; pointer-events: auto; }
+.scroll-top:hover { background: rgba(255,255,255,0.18); }
+
+/* ─── Footer ─── */
+.site-footer {
+  border-top: 1px solid #2A2A2A;
+  background: #111;
+  padding: 120px 24px;
+  text-align: center;
+}
+.footer-thanks {
+  font-size: 56px;
+  font-weight: 500;
+  color: #fff;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+.footer-name {
+  font-size: 18px;
+  color: #666;
+  margin-top: 16px;
+}
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 32px;
+}
+.footer-links a {
+  font-size: 16px;
+  color: #2C7BE5;
+  text-decoration: none;
+}
+.footer-links a:hover { text-decoration: underline; }
+
+/* ─── Responsive ─── */
+@media (max-width: 900px) {
+  .hero h1 { font-size: 28px; }
+  .footer-thanks { font-size: 36px; }
+  .hero-actions { flex-direction: column; }
+  .section-content {
+    grid-template-columns: 1fr;
+  }
+  .screenshot-wrap {
+    position: static;
+  }
+  .legend-items {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .audit-header { padding: 48px 0 32px; }
+  .dot { --dot-size: 24px; font-size: 10px; }
+  .ba-grid { grid-template-columns: 1fr; }
+  .solutions-metrics { flex-wrap: wrap; gap: 24px; }
+  .solution-before-after { grid-template-columns: 1fr; }
+  .solved-row { grid-template-columns: 1fr; gap: 8px; }
+  .solved-row-header { display: none; }
+  .jobs-grid { grid-template-columns: 1fr; }
+  .conclusion-card { padding: 24px; }
+  .flow-steps { grid-template-columns: 1fr; }
+  .flow-metrics { grid-template-columns: repeat(2, 1fr); }
+  .flow-conclusion { padding: 24px; }
+}
+
+@media (max-width: 480px) {
+  .container { padding: 0 16px; }
+  .dot { --dot-size: 22px; font-size: 9px; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>Test Assignment · UX Designer · DBeaver</h1>
+  <p class="author">Анастасия Покатилова · Senior Product UX/UI Designer</p>
+  <a class="link-brief" href="https://drive.google.com/file/d/15I7EvS2ZNeIwOZ97DvSvHSsV_8R1xKB6/view?usp=sharing" target="_blank" rel="noopener">Открыть бриф задания → Google Drive</a>
+  <p class="description">Результаты UX-аудита и финальное дизайн-решение для Preferences → Security в DBeaver Ultimate 26.1.0 (macOS). Кликайте на цветные точки на скриншотах чтобы увидеть карточки с проблемами.</p>
+  <div class="hero-actions">
+    <button class="hero-btn-primary" onclick="document.getElementById('audit').scrollIntoView({behavior:'smooth'})">Смотреть интерактивное исследование</button>
+    <a class="hero-btn-secondary" href="https://www.figma.com/design/fye36sRLiAdEAWCDwP4hIx/Test-assignment.-Security-page?node-id=0-1&t=3wqObvQrnV9PulNh-1" target="_blank" rel="noopener">Открыть полное исследование в Figma</a>
+    <span class="figma-tags">User Interview · JTBD · Pain Path · Before/After</span>
+  </div>
+  <div class="scroll-hint">↓</div>
+  <p class="hero-note">Рекомендуется для просмотра на десктопе</p>
+</header>
+
+<div class="container" id="audit">
+
+  <!-- Header -->
+  <header class="audit-header">
+    <span class="audit-label">UX Audit · Security Screen</span>
+    <h1 class="audit-title">Анализ UX проблем</h1>
+    <p class="audit-subtitle">UX-аудит шести экранов DBeaver Ultimate: главный экран Security, Eclipse Secure Storage Viewer, Advanced и трёхшаговый wizard смены мастер-пароля. Найдено 30 проблем трёх уровней важности — от блокеров до минорных.</p>
+  </header>
+
+  <div class="hairline"></div>
+
+  <!-- Legend -->
+  <section class="legend">
+    <span class="legend-label">Уровни проблем</span>
+    <div class="legend-items">
+      <div class="legend-item">
+        <div class="legend-item-head">
+          <div class="legend-dot critical"></div>
+          <span class="legend-name">Critical</span>
+          <span class="legend-count">· 11</span>
+        </div>
+        <p class="legend-desc">Блокирует пользователя или угрожает данным. Чинить срочно.</p>
+      </div>
+      <div class="legend-item">
+        <div class="legend-item-head">
+          <div class="legend-dot major"></div>
+          <span class="legend-name">Major</span>
+          <span class="legend-count">· 14</span>
+        </div>
+        <p class="legend-desc">Затрудняет работу, но не мешает довести задачу до конца.</p>
+      </div>
+      <div class="legend-item">
+        <div class="legend-item-head">
+          <div class="legend-dot minor"></div>
+          <span class="legend-name">Minor</span>
+          <span class="legend-count">· 4</span>
+        </div>
+        <p class="legend-desc">Визуальный шум и мелкие неудобства. Низкий приоритет.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="hairline"></div>
+
+  <!-- Sections rendered by JS -->
+  <div id="sections"></div>
+
+  <!-- Design Solutions -->
+  <div id="solutions-section"></div>
+
+</div>
+
+<!-- Tooltip -->
+<div class="tooltip" id="tooltip">
+  <div class="tooltip-arrow" id="tooltip-arrow"></div>
+  <div class="finding-meta">
+    <div class="finding-num" id="tooltip-num"></div>
+    <span class="finding-severity" id="tooltip-severity"></span>
+  </div>
+  <h3 class="finding-title" id="tooltip-title"></h3>
+  <p class="finding-description" id="tooltip-desc"></p>
+  <div class="finding-tags" id="tooltip-tags"></div>
+</div>
+
+<script>
+const SEVERITY = {
+  critical: { color: '#EA0000', label: 'CRITICAL' },
+  major:    { color: '#FF8018', label: 'MAJOR' },
+  minor:    { color: '#FACC15', label: 'MINOR' }
+};
+
+const SECTIONS = [
+  {
+    id: 1,
+    number: '01',
+    label: '01 — ЭКРАН',
+    name: 'Security',
+    desc: 'Preferences → General → Security. Главный экран настройки безопасности в DBeaver Ultimate. Цветные точки на скриншоте — найденные проблемы с указанием уровня важности.',
+    image: 'dbeaver-ux-audit-assets/01-security.png',
+    caption: 'DBeaver Ultimate 26.1.0 — General → Security'
+  },
+  {
+    id: 2,
+    number: '02',
+    label: '02 — ЭКРАН',
+    name: 'See what secured data was saved',
+    desc: 'Что открывается при клике «See what secured data was saved» — Eclipse Secure Storage Viewer. Технический экран Eclipse, выведенный наружу без адаптации под пользователей DBeaver.',
+    image: 'dbeaver-ux-audit-assets/02-saved-data.png',
+    caption: 'Eclipse Secure Storage Viewer',
+    note: {
+      title: 'Конфликт с документацией',
+      text: 'Документация Eclipse: «Typically you will have no reason to alter the preferences on this page. The options here are mostly for troubleshooting.» Документация DBeaver называет это «Advanced mode» — но кнопка на основном экране без пометки.'
+    }
+  },
+  {
+    id: 3,
+    number: '03',
+    label: '03 — ЭКРАН',
+    name: 'Advanced',
+    desc: 'Экран продвинутых настроек Eclipse Secure Storage. Служебный интерфейс Eclipse Equinox для разработчиков плагинов — не для конечных пользователей DBeaver.',
+    image: 'dbeaver-ux-audit-assets/03-advanced.png',
+    caption: 'Eclipse Equinox · Secure Storage Advanced'
+  },
+  {
+    id: 4,
+    number: '04',
+    label: '04 — ФЛОУ · CHANGE PASSWORD · STEP 1',
+    name: 'Change Password · Step 1',
+    desc: 'Первый шаг wizard смены мастер-пароля. Старого пароля у пользователя нет, но wizard говорит «decrypting with old master password».',
+    image: 'dbeaver-ux-audit-assets/04-change-password-1.png',
+    caption: 'Change Master Password Wizard · Step 1 of 3'
+  },
+  {
+    id: 5,
+    number: '05',
+    label: '05 — ФЛОУ · CHANGE PASSWORD · STEP 2',
+    name: 'Change Password · Step 2',
+    desc: 'Второй шаг wizard. Пояснительный текст без действия — пользователь жмёт Next, не сделав ничего.',
+    image: 'dbeaver-ux-audit-assets/05-change-password-2.png',
+    caption: 'Change Master Password Wizard · Step 2 of 3'
+  },
+  {
+    id: 6,
+    number: '06',
+    label: '06 — ФЛОУ · CHANGE PASSWORD · STEP 3',
+    name: 'Change Password · Step 3',
+    desc: 'Третий шаг — собственно ввод нового пароля. Появляется поверх предыдущих двух модальных окон без объяснения требований к паролю.',
+    image: 'dbeaver-ux-audit-assets/06-change-password-3.png',
+    caption: 'Change Master Password Wizard · Step 3 of 3'
+  }
+];
+
+const FINDINGS = [
+  // ─── Screen 1: Security ───
+  {
+    id: 1, section: 1, displayNum: '1', severity: 'critical',
+    x: 42.6, y: 13.7,
+    title: 'Ложный чекбокс',
+    desc: 'Global config нельзя снять — выбрасывает ошибку. Потеря времени, подрыв доверия к интерфейсу. «Зачем делать её активной?» — интервью.',
+    tags: [{ label: 'Match Between System & Real World', url: 'https://www.nngroup.com/articles/match-system-real-world/' }]
+  },
+  {
+    id: 2, section: 1, displayNum: '2', severity: 'major',
+    x: 50.4, y: 16.4,
+    title: 'Два равнозначных чекбокса',
+    desc: 'Отсутствие иерархии между Global Configuration и Database connection credentials. Пользователю непонятно чем два пункта отличаются.',
+    tags: [
+      { label: 'Match Between System & Real World', url: 'https://www.nngroup.com/articles/match-system-real-world/' },
+      { label: 'Law of Similarity', url: 'https://lawsofux.com/law-of-similarity/' }
+    ]
+  },
+  {
+    id: 3, section: 1, displayNum: '3', severity: 'critical',
+    x: 37.8, y: 21.5,
+    title: 'Кнопка оторвана от контекста',
+    desc: 'Открывает диалог с содержимым Eclipse Secure Storage — технический экран Eclipse. Вводит в заблуждение. «Что это за пароли?» — интервью.',
+    tags: [
+      { label: 'Match Between System & Real World', url: 'https://www.nngroup.com/articles/match-system-real-world/' },
+      { label: 'Consistency', url: 'https://www.nngroup.com/articles/consistency-and-standards/' }
+    ]
+  },
+  {
+    id: 4, section: 1, displayNum: '4', severity: 'critical',
+    x: 56.2, y: 28.3,
+    title: 'Критическая информация скрыта',
+    desc: '«Нельзя перенести на другую ОС» — мелкий шрифт, низкое discoverability и accessibility. Возможная потеря конфига при смене машины.',
+    tags: [
+      { label: 'Visibility of System Status', url: 'https://www.nngroup.com/articles/visibility-system-status/' },
+      { label: 'Preventing User Errors', url: 'https://www.nngroup.com/articles/slips/' },
+      { label: 'Visual Hierarchy', url: 'https://www.nngroup.com/articles/visual-hierarchy-ux-definition/' }
+    ]
+  },
+  {
+    id: 5, section: 1, displayNum: '5', severity: 'minor',
+    x: 41.2, y: 47.8,
+    title: '3 метода Encryption без иерархии',
+    desc: 'Непонятно какой метод предпочтителен и есть ли иерархия между методами.',
+    tags: [{ label: 'Memory Recognition', url: 'https://www.nngroup.com/articles/recognition-and-recall/' }]
+  },
+  {
+    id: 6, section: 1, displayNum: '6', severity: 'major',
+    x: 41.2, y: 54,
+    title: '«Not secure» Automation',
+    desc: 'Метка «Not secure» только в описании — пользователь не замечает разницы и пропускает информацию. На интервью дата-инженер не смог объяснить зачем нужен метод если он not secure.',
+    tags: [
+      { label: 'Visibility of System Status', url: 'https://www.nngroup.com/articles/visibility-system-status/' },
+      { label: 'Help and Documentation', url: 'https://www.nngroup.com/articles/help-and-documentation/' }
+    ]
+  },
+  {
+    id: 7, section: 1, displayNum: '7', severity: 'major',
+    x: 29.4, y: 62,
+    title: 'Не корректный UX writing',
+    desc: 'Кнопка одинакова что с паролем, что без него. «Странно, что задать пароль нет опции — можно только сменить» — интервью.',
+    tags: [
+      { label: 'Visibility of System Status', url: 'https://www.nngroup.com/articles/visibility-system-status/' },
+      { label: 'Help and Documentation', url: 'https://www.nngroup.com/articles/help-and-documentation/' }
+    ]
+  },
+  {
+    id: 8, section: 1, displayNum: '8', severity: 'critical',
+    x: 62.9, y: 62,
+    title: 'Double Confirm, нет ясного результата',
+    desc: 'Флоу из двух Delete-диалогов создаёт неопределённость и оставляет пользователя в неизвестном состоянии при отказе от перезапуска: удалился ли пароль?',
+    tags: [
+      { label: 'Visibility of System Status', url: 'https://www.nngroup.com/articles/visibility-system-status/' },
+      { label: 'Preventing User Errors', url: 'https://www.nngroup.com/articles/slips/' }
+    ]
+  },
+  {
+    id: 9, section: 1, displayNum: '9', severity: 'major',
+    x: 90.8, y: 90.1,
+    title: 'Apply + Apply and Close',
+    desc: 'Дублирование. Неясная разница между двумя кнопками подтверждения.',
+    tags: [{ label: 'Aesthetic and Minimalist Design', url: 'https://www.nngroup.com/articles/aesthetic-minimalist-design/' }]
+  },
+  {
+    id: 10, section: 1, displayNum: '10', severity: 'major',
+    x: 73.1, y: 90.1,
+    title: 'Restore Default — не ясен результат',
+    desc: 'Пользователь не видит результата действия кнопки. Найден тикет #19928 — задача на унификацию поведения Restore Defaults по всем разделам Preferences.',
+    tags: [
+      { label: 'Visibility of System Status', url: 'https://www.nngroup.com/articles/visibility-system-status/' },
+      { label: 'Consistency', url: 'https://www.nngroup.com/articles/consistency-and-standards/' }
+    ]
+  },
+  {
+    id: 11, section: 1, displayNum: '11', severity: 'minor',
+    x: 90, y: 7.8,
+    title: 'Дополнительная навигация — неконсистентность с macOS / Windows',
+    desc: 'Стандартный элемент Eclipse PreferenceDialog для навигации по истории. На одностраничном Security-экране не несёт функции — визуальный шум.',
+    tags: [{ label: 'Aesthetic and Minimalist Design', url: 'https://www.nngroup.com/articles/aesthetic-minimalist-design/' }]
+  },
+  {
+    id: 12, section: 1, displayNum: '12', severity: 'minor',
+    x: 95, y: 7.8,
+    title: 'Видимость доп. меню',
+    desc: 'Resize tree и Key Scrolling спрятаны от пользователей.',
+    tags: [{ label: 'Memory Recognition', url: 'https://www.nngroup.com/articles/recognition-and-recall/' }]
+  },
+  {
+    id: 13, section: 1, displayNum: '13', severity: 'minor',
+    x: 8.0, y: 96.3,
+    title: 'Длительность времени на поиск Security',
+    desc: 'Пользователь с исследования смог найти Security только через поиск. Вынести в отдельное меню? Конфликт решения с Eclipse IDE.',
+    tags: [{ label: "Jakob's Law", url: 'https://lawsofux.com/jakobs-law/' }]
+  },
+
+  // ─── Screen 2: See what secured data was saved ───
+  {
+    id: 14, section: 2, displayNum: '1', severity: 'critical',
+    x: 38, y: 18,
+    title: 'Конфликт ожидание / реальность',
+    desc: 'DBeaver в документации пишет что это «Advanced mode» — но кнопка на основном экране без пометки и не совпадает по названию.',
+    tags: []
+  },
+  {
+    id: 15, section: 2, displayNum: '2', severity: 'critical',
+    x: 70, y: 32,
+    title: 'Advanced mode — конфликт документации',
+    desc: 'В технической документации название Advanced mode. Конфликт между документацией и UI. Гипотеза: для продвинутого пользователя DBeaver он, возможно, бесполезен — нельзя прочитать значения, нельзя понять что за узлы в дереве, нельзя выборочно пересохранить конкретное подключение. «Почему я не могу кликнуть и посмотреть пароль?» — интервью.',
+    tags: []
+  },
+  {
+    id: 16, section: 2, displayNum: '2', severity: 'major',
+    x: 8, y: 28,
+    title: 'Узлы дерева непонятны пользователям',
+    desc: 'Внутренние идентификаторы Eclipse-платформы (org.eclipse.core.net, org.eclipse.equinox.sec) — технические названия, не предназначенные для конечного пользователя.',
+    tags: []
+  },
+  {
+    id: 17, section: 2, displayNum: '3', severity: 'major',
+    x: 62, y: 90,
+    title: 'Restore Default — не ясен результат',
+    desc: 'Пользователь не видит результата действия кнопки Restore Default.',
+    tags: []
+  },
+  {
+    id: 18, section: 2, displayNum: '4', severity: 'critical',
+    x: 90, y: 74,
+    title: 'Delete — критический конфликт, угроза удаления данных',
+    desc: 'Delete здесь удаляет мастер-пароль в обход основного флоу. После рестарта пароль пропадает. Найдено два деструктивных пути к одному результату — с разным уровнем контекста и защиты. Кнопка Delete на основном экране воспринимается как один из первых элементов интерфейса, но удаляет всё содержимое secure storage.',
+    tags: []
+  },
+
+  // ─── Screen 3: Advanced ───
+  {
+    id: 19, section: 3, displayNum: '1', severity: 'critical',
+    x: 79, y: 20,
+    title: 'Eclipse экран не для пользователей',
+    desc: 'Служебный Eclipse Equinox для разработчиков плагинов. Обычный пользователь не может осмысленно выбрать алгоритм шифрования. «Зачем столько алгоритмов?» — интервью',
+    tags: []
+  },
+  {
+    id: 20, section: 3, displayNum: '2', severity: 'major',
+    x: 66, y: 83,
+    title: '4 кнопки для одного дропдауна',
+    desc: 'Restore Defaults, Apply, Cancel, OK — избыточно для управления единственным дропдауном.',
+    tags: []
+  },
+
+  // ─── Screen 4: Change Password Step 1 ───
+  {
+    id: 21, section: 4, displayNum: '1', severity: 'critical',
+    x: 42, y: 27,
+    title: '«Old Password» без контекста — конфликт',
+    desc: 'По умолчанию мастер-пароль не задан пользователем — данные шифруются встроенным DES-ключом. Wizard говорит «decrypting with old master password», хотя пользователь никакого пароля не задавал и не понимает контекст. Влияние: замешательство на первом же шаге, потеря доверия к Security в DBeaver.',
+    tags: []
+  },
+  {
+    id: 22, section: 4, displayNum: '2', severity: 'major',
+    x: 47, y: 58,
+    title: 'Шаг без действия',
+    desc: 'Паттерн wizard предполагает осмысленное действие на каждом шаге. Step 1 и Step 2 содержат только пояснительный текст — пользователь дважды нажимает Next, ничего не сделав. Wizard стал обёрткой без функции.',
+    tags: []
+  },
+
+  // ─── Screen 5: Change Password Step 2 ───
+  {
+    id: 23, section: 5, displayNum: '2', severity: 'major',
+    x: 48, y: 58,
+    title: 'Шаг без действия',
+    desc: 'Та же проблема, что и на Step 1: только пояснительный текст, никакого ввода или решения. Wizard превращается в обёртку.',
+    tags: []
+  },
+
+  // ─── Screen 6: Change Password Step 3 ───
+  {
+    id: 24, section: 6, displayNum: '3', severity: 'critical',
+    x: 38, y: 37,
+    title: 'Нет индикатора сложности пароля',
+    desc: 'Password + Confirm Password без password strength indicator. Администратор может задать политику (минимальная длина, символы, mixed case), но пользователь требований не видит — узнаёт их через ошибку валидации.',
+    tags: []
+  },
+  {
+    id: 25, section: 6, displayNum: '4', severity: 'major',
+    x: 75, y: 17,
+    title: 'Три слоя модальных окон',
+    desc: 'Preferences → Wizard (Step 2 виден за диалогом) → Set password dialog. Пользователь видит три слоя одновременно, каждый со своим набором кнопок. Потеря контекста. NN/g: «Stacking modals compounds the interruption.»',
+    tags: []
+  },
+  {
+    id: 26, section: 6, displayNum: '5', severity: 'major',
+    x: 27, y: 44,
+    title: 'Объяснение ценности — на 3-м уровне (нарушена иерархия)',
+    desc: '«Set master password to save secure information» — единственное место во всём интерфейсе, где объясняется зачем нужен мастер-пароль. Лежит внутри модального окна внутри wizard внутри Preferences. Влияние: пользователь не понимает ценность фичи до момента, когда уже решил ей воспользоваться.',
+    tags: []
+  }
+];
+
+function renderTags(tags) {
+  return tags.map(t => t.url
+    ? `<a class="tag" href="${t.url}" target="_blank" rel="noopener">${t.label} ↗</a>`
+    : `<span class="tag tag-plain">${t.label}</span>`
+  ).join('');
+}
+
+// ─── Render ───
+function renderSections() {
+  const container = document.getElementById('sections');
+  let html = '';
+
+  for (const section of SECTIONS) {
+    const findings = FINDINGS.filter(f => f.section === section.id);
+
+    html += `
+      <div class="hairline"></div>
+      <section class="audit-section" id="section-${section.id}">
+        <div class="section-header">
+          <span class="section-number">${section.label}</span>
+          <h2 class="section-name">${section.name}</h2>
+          <p class="section-desc">${section.desc}</p>
+        </div>
+        <div class="section-content">
+          <div class="screenshot-wrap">
+            <div class="screenshot-container" data-section="${section.id}">
+              <img src="${section.image}" alt="${section.name}" loading="lazy">
+              ${findings.map(f => `
+                <div class="dot ${f.severity}" data-finding="${f.id}" style="left:${f.x}%;top:${f.y}%">${f.displayNum}</div>
+              `).join('')}
+            </div>
+            <p class="screenshot-caption">${section.caption}</p>
+            ${section.note ? `
+              <div class="note-card">
+                <h4 class="note-card-title">${section.note.title}</h4>
+                <p class="note-card-desc">${section.note.text}</p>
+              </div>
+            ` : ''}
+          </div>
+          <div class="findings-grid">
+            ${findings.map(f => `
+              <div class="finding-card ${f.severity}" data-finding="${f.id}">
+                <div class="finding-meta">
+                  <div class="finding-num ${f.severity}">${f.displayNum}</div>
+                  <span class="finding-severity ${f.severity}">${SEVERITY[f.severity].label}</span>
+                </div>
+                <h3 class="finding-title">${f.title}</h3>
+                <p class="finding-description">${f.desc}</p>
+                ${f.tags.length ? `
+                  <div class="finding-tags">
+                    ${f.tags.map(t => `<a class="tag" href="${t.url}" target="_blank" rel="noopener">${t.label} ↗</a>`).join('')}
+                  </div>
+                ` : ''}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  container.innerHTML = html;
+}
+
+// ─── Tooltip ───
+const tooltip = document.getElementById('tooltip');
+const tooltipArrow = document.getElementById('tooltip-arrow');
+const tooltipNum = document.getElementById('tooltip-num');
+const tooltipSeverity = document.getElementById('tooltip-severity');
+const tooltipTitle = document.getElementById('tooltip-title');
+const tooltipDesc = document.getElementById('tooltip-desc');
+const tooltipTags = document.getElementById('tooltip-tags');
+
+let activeFindingId = null;
+
+function showTooltip(findingId, dotEl) {
+  const f = FINDINGS.find(f => f.id === findingId);
+  if (!f) return;
+
+  activeFindingId = findingId;
+
+  tooltipNum.textContent = f.displayNum;
+  tooltipNum.className = 'finding-num ' + f.severity;
+  tooltipSeverity.textContent = SEVERITY[f.severity].label;
+  tooltipSeverity.className = 'finding-severity ' + f.severity;
+  tooltipTitle.textContent = f.title;
+  tooltipDesc.textContent = f.desc;
+  tooltipTags.innerHTML = f.tags.map(t =>
+    `<a class="tag" href="${t.url}" target="_blank" rel="noopener">${t.label} ↗</a>`
+  ).join('');
+
+  tooltip.classList.add('visible');
+  positionTooltip(dotEl);
+  highlightFinding(findingId);
+}
+
+function hideTooltip() {
+  tooltip.classList.remove('visible');
+  activeFindingId = null;
+  clearHighlight();
+}
+
+function positionTooltip(dotEl) {
+  const dotRect = dotEl.getBoundingClientRect();
+  const ttWidth = 340;
+  const gap = 12;
+
+  tooltip.style.width = ttWidth + 'px';
+
+  const dotCenterX = dotRect.left + dotRect.width / 2;
+  const dotTop = dotRect.top;
+  const dotBottom = dotRect.bottom;
+
+  let left = dotCenterX - ttWidth / 2;
+  left = Math.max(16, Math.min(left, window.innerWidth - ttWidth - 16));
+
+  tooltip.style.display = 'block';
+  const ttHeight = tooltip.offsetHeight;
+
+  let top;
+  let arrowSide;
+
+  if (dotTop - gap - ttHeight > 16) {
+    top = dotTop - gap - ttHeight;
+    arrowSide = 'top';
+  } else {
+    top = dotBottom + gap;
+    arrowSide = 'bottom';
+  }
+
+  tooltip.style.left = left + 'px';
+  tooltip.style.top = top + 'px';
+
+  const arrowLeft = dotCenterX - left - 6;
+  tooltipArrow.style.left = Math.max(12, Math.min(arrowLeft, ttWidth - 24)) + 'px';
+  tooltipArrow.className = 'tooltip-arrow ' + arrowSide;
+}
+
+function highlightFinding(findingId) {
+  clearHighlight();
+  const dot = document.querySelector(`.dot[data-finding="${findingId}"]`);
+  const card = document.querySelector(`.finding-card[data-finding="${findingId}"]`);
+  if (dot) dot.classList.add('active');
+  if (card) card.classList.add('active');
+}
+
+function clearHighlight() {
+  document.querySelectorAll('.dot.active, .finding-card.active').forEach(el => el.classList.remove('active'));
+}
+
+// ─── Events ───
+document.addEventListener('click', (e) => {
+  if (e.target.closest('.tag')) return;
+  if (e.target.closest('.severity-group-header')) return;
+
+  const solDot = e.target.closest('.dot[data-solution]');
+  const solCard = e.target.closest('.solution-card[data-solution]');
+
+  if (solDot) {
+    e.stopPropagation();
+    const id = solDot.dataset.solution;
+    if (activeFindingId === id) {
+      hideTooltip();
+    } else {
+      showSolutionTooltip(id, solDot);
+    }
+    return;
+  }
+
+  if (solCard) {
+    const id = solCard.dataset.solution;
+    const dot = document.querySelector(`#after-screenshot-sticky .dot[data-solution="${id}"]`);
+    if (dot) {
+      dot.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => showSolutionTooltip(id, dot), 350);
+    }
+    return;
+  }
+
+  const dot = e.target.closest('.dot[data-finding]');
+  const card = e.target.closest('.finding-card[data-finding]');
+
+  if (dot) {
+    e.stopPropagation();
+    const id = parseInt(dot.dataset.finding);
+    if (activeFindingId === id) {
+      hideTooltip();
+    } else {
+      showTooltip(id, dot);
+    }
+  } else if (card) {
+    const id = parseInt(card.dataset.finding);
+    const dot = document.querySelector(`.dot[data-finding="${id}"]`);
+    if (dot) {
+      dot.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => showTooltip(id, dot), 350);
+    }
+  } else if (!e.target.closest('.tooltip')) {
+    hideTooltip();
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') hideTooltip();
+});
+
+// Flow step switching
+const FLOW_SCREENS = {
+  1: { src: 'dbeaver-ux-audit-assets/flow-screen-1.png', alt: 'Security status', caption: 'Экран 1 из 3 — Security status' },
+  2: { src: 'dbeaver-ux-audit-assets/flow-screen-2.png', alt: 'Set password', caption: 'Экран 2 из 3 — Set password' },
+  3: { src: 'dbeaver-ux-audit-assets/flow-screen-3.png', alt: 'Подтверждение', caption: 'Экран 3 из 3 — Подтверждение' }
+};
+document.addEventListener('click', (e) => {
+  const step = e.target.closest('.flow-step[data-flow-step]');
+  if (!step) return;
+  const num = parseInt(step.dataset.flowStep);
+  const screen = FLOW_SCREENS[num];
+  if (!screen) return;
+  document.querySelectorAll('.flow-step').forEach(s => s.classList.remove('active'));
+  step.classList.add('active');
+  const img = document.getElementById('flow-img');
+  const caption = document.getElementById('flow-caption');
+  if (img) { img.src = screen.src; img.alt = screen.alt; }
+  if (caption) caption.textContent = screen.caption;
+});
+
+window.addEventListener('scroll', () => {
+  if (activeFindingId !== null) {
+    const dot = document.querySelector(`.dot[data-finding="${activeFindingId}"]`);
+    if (dot) positionTooltip(dot);
+  }
+}, { passive: true });
+
+// ─── Solutions Data ───
+const SOLUTIONS = [
+  {
+    id: 's1', num: '1', severity: 'critical',
+    x: 82, y: 10,
+    title: 'Security status с бейджем «Not configured»',
+    before: 'Radio-кнопка выбрана по умолчанию — ложное ощущение что пароль активен',
+    after: 'Первый элемент экрана — явный статус Active / Not configured',
+    tags: [
+      { label: 'wiki/Project-security', url: 'https://github.com/dbeaver/dbeaver/wiki/Project-security' },
+      { label: 'Тикет #37306', url: 'https://github.com/dbeaver/dbeaver/issues/37306' },
+      { label: 'NN/Group #1 Visibility of system status' }
+    ]
+  },
+  {
+    id: 's2', num: '2', severity: 'critical',
+    x: 55, y: 20,
+    title: 'Warning-баннер с ⚠ иконкой',
+    before: '«Нельзя перенести на другую ОС» — мелкий серый шрифт',
+    after: 'Визуальный баннер с иконкой ⚠ и болдом, выше карточек методов',
+    tags: [
+      { label: 'wiki/Managing-Master-Password', url: 'https://github.com/dbeaver/dbeaver/wiki/Managing-Master-Password' },
+      { label: 'NN/Group #1, #5' },
+      { label: 'requires dev' }
+    ]
+  },
+  {
+    id: 's3', num: '3', severity: 'major',
+    x: 25, y: 17,
+    title: 'Encryption method — иерархия action-first',
+    before: 'Сначала «что шифровать», потом «как» — без контекста',
+    after: 'Сначала выбор метода, потом скоуп. Action-first иерархия',
+    tags: [
+      { label: 'Интервью: «Что такое крепки?»' },
+      { label: 'Information Architecture' }
+    ]
+  },
+  {
+    id: 's4', num: '4', severity: 'major',
+    x: 55, y: 30,
+    title: 'Master Password — карточка с Set/Recover',
+    before: '3 кнопки в ряд, Recover disabled без tooltip',
+    after: 'Set + Recover внутри карточки метода, пояснение под кнопкой',
+    tags: [
+      { label: 'Тикет #23084', url: 'https://github.com/dbeaver/dbeaver/issues/23084' },
+      { label: 'dbeaver.com/Managing-Master-Password', url: 'https://dbeaver.com/docs/dbeaver/Managing-Master-Password/' },
+      { label: 'NN/Group #1, #10' }
+    ]
+  },
+  {
+    id: 's5', num: '5', severity: 'critical',
+    x: 78, y: 45,
+    title: 'Automation отделена с бейджем «Headless»',
+    before: 'Визуально идентична безопасным методам, «Not secure» в тексте',
+    after: 'Визуально отделена, бейдж Headless, болд на «server environments only»',
+    tags: [
+      { label: 'dbeaver.com/Automation-Security', url: 'https://dbeaver.com/docs/dbeaver/Admin-Manage-Connections/#automation-security' },
+      { label: 'NN/Group #5 Error prevention' }
+    ]
+  },
+  {
+    id: 's6', num: '6', severity: 'critical',
+    x: 35, y: 57,
+    title: 'Global config — статичный элемент',
+    before: 'Интерактивный чекбокс, при снятии — диалог ошибки',
+    after: 'Disabled чекбокс с текстом «always encrypted» и ссылкой More info',
+    tags: [
+      { label: 'Интервью: «Зачем делать её активной?»' },
+      { label: 'NN/Group #2, #5' },
+      { label: 'Закон Гештальта' }
+    ]
+  },
+  {
+    id: 's7', num: '7', severity: 'critical',
+    x: 35, y: 87,
+    title: 'Убрана кнопка «See what secured data»',
+    before: 'Кнопка без пометки Advanced открывала Eclipse Viewer с Delete',
+    after: 'Текстовая ссылка «Advanced storage settings...» внизу экрана',
+    tags: [
+      { label: 'Eclipse docs: «mostly for troubleshooting»' },
+      { label: 'dbeaver.com/Security', url: 'https://dbeaver.com/docs/dbeaver/Security/' },
+      { label: 'NN/Group #2, #5' }
+    ]
+  },
+  {
+    id: 's8', num: '8', severity: 'critical',
+    x: 40, y: 77,
+    title: 'Delete secure storage — изолированная секция',
+    before: 'Delete в одном ряду с Change и Recover, одинакового веса',
+    after: 'Отдельная секция с заголовком, описанием последствий и предупреждением',
+    tags: [
+      { label: 'Тикеты #23084, #7211', url: 'https://github.com/dbeaver/dbeaver/issues/23084' },
+      { label: 'NN/Group #5 Error prevention' }
+    ]
+  },
+  {
+    id: 's9', num: '9', severity: 'major',
+    x: 30, y: 70,
+    title: 'Apply с пояснением',
+    before: '4 кнопки: Restore Defaults (не работает) + Apply + Cancel + Apply and Close',
+    after: 'Apply внутри контента с пояснением. Restore Defaults убрана. ⚠ Требует согласования с разработкой — потенциальный конфликт с общей системой Preferences Eclipse',
+    tags: [
+      { label: 'Тикет #19928', url: 'https://github.com/dbeaver/dbeaver/issues/19928' },
+      { label: 'Тикет #12605', url: 'https://github.com/dbeaver/dbeaver/issues/12605' },
+      { label: 'NN/Group #1' },
+      { label: 'requires dev' }
+    ]
+  },
+  {
+    id: 's10', num: '10', severity: 'minor',
+    x: 93, y: 7,
+    title: 'Навигация — стрелки убраны',
+    before: 'Стрелки ← → + скрытое меню с нулевой обнаруживаемостью',
+    after: 'Стрелки убраны. Меню ⋮ осталось видимым',
+    tags: [
+      { label: 'NN/Group #8 Aesthetic minimalism' },
+      { label: '#6 Recognition > recall' },
+      { label: 'requires dev' }
+    ]
+  }
+];
+
+const SOLVED_PROBLEMS = {
+  critical: {
+    label: '7 критичных решено',
+    items: [
+      { problem: 'Нет статуса системы — Radio выбрана, но пароль не задан. Данные на DES-ключе из исходного кода.', solution: 'Security status с бейджем Not configured / Active — первый элемент экрана', evidence: 'wiki/Project-security, тикет #37306, интервью' },
+      { problem: 'Два пути удаления credentials — Delete password + Delete внутри Eclipse Viewer', solution: 'Кнопка See what secured убрана → один путь через Delete в изолированной секции', evidence: 'Eclipse docs, тикет #23084' },
+      { problem: 'Предупреждение скрыто в тексте — «Нельзя перенести на другую ОС» — мелкий серый шрифт', solution: 'Warning-баннер с иконкой, болд на ключевых словах, выше карточек методов', evidence: 'wiki/Managing-Master-Password · requires dev' },
+      { problem: 'Eclipse-экран как основной элемент — Кнопка без пометки Advanced открывает технический Viewer', solution: 'Заменена на ссылку «Advanced storage settings...» внизу экрана', evidence: 'Eclipse: «mostly for troubleshooting», DBeaver: «Advanced mode»' },
+      { problem: 'Automation без визуального барьера — «Not secure» только в описании', solution: 'Отделена визуально, бейдж Headless, болд на «server environments only»', evidence: 'dbeaver.com/Automation-Security, интервью' },
+      { problem: 'Delete рядом с Change — Три кнопки в ряд, одинаковый вес', solution: 'Изолированная секция Delete secure storage с описанием и предупреждением', evidence: 'Тикеты #23084, #7211' },
+      { problem: 'Ложный чекбокс — Global configuration нельзя снять → диалог ошибки', solution: 'Disabled чекбокс с текстом «always encrypted» и ссылкой More info', evidence: 'Интервью: «Зачем делать её активной?»' }
+    ]
+  },
+  major: {
+    label: '7 значимых решено',
+    items: [
+      { problem: 'Чекбоксы без разницы — Global config и DB credentials — нет иерархии', solution: 'Global config = статичный текст. DB credentials = чекбокс с описанием', evidence: 'Интервью, закон Гештальта' },
+      { problem: 'Три метода без иерархии — Одинаковый визуальный вес', solution: 'Карточки с бейджами Recommended / Headless. Порядок action-first', evidence: 'Интервью: «Всё в одну кучу»' },
+      { problem: 'Change без статуса — Одинакова когда пароль задан и когда нет', solution: 'Set password / Change password — текст меняется по состоянию', evidence: 'dbeaver.com/Managing-Master-Password' },
+      { problem: 'Recover disabled без объяснений — Нет tooltip, пользователь не знает условий', solution: 'Пояснение: «Recovery available if questions were set during creation»', evidence: 'Тикет #23084' },
+      { problem: 'Apply + Apply and Close — Дублирование, неясная разница', solution: 'Apply в контенте с пояснением. Restore Defaults убрана', evidence: 'Тикет #19928 · requires dev' },
+      { problem: 'Restore Defaults не работает — Нажатие не вызывает реакции', solution: 'Убрана. Опасна по семантике на Security-экране', evidence: 'Тикеты #19928, #12605 · requires dev' },
+      { problem: 'Два деструктивных пути — Delete на основном + Delete в Eclipse Viewer', solution: 'Eclipse Viewer убран. Один путь через изолированную секцию', evidence: 'Подтверждено тестированием' }
+    ]
+  },
+  minor: {
+    label: '2 минорных решено',
+    items: [
+      { problem: 'Стрелки навигации — Легаси Eclipse, не нужны на Security-экране', solution: 'Убраны', evidence: 'requires dev' },
+      { problem: 'Скрытое меню — Resize tree и Key Scrolling — обнаруживаемость нулевая', solution: 'Меню осталось видимым, опции доступны', evidence: 'requires dev' }
+    ]
+  }
+};
+
+function renderSolutions() {
+  const container = document.getElementById('solutions-section');
+  const severityOrder = ['critical', 'major', 'minor'];
+
+  const tableHtml = severityOrder.map(sev => {
+    const group = SOLVED_PROBLEMS[sev];
+    return `
+      <div class="severity-group" data-severity="${sev}">
+        <div class="severity-group-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="chevron">▸</span>
+          <span class="severity-group-dot ${sev}"></span>
+          <span class="severity-group-label">${group.label}</span>
+        </div>
+        <div class="severity-group-body">
+          <div class="solved-row solved-row-header">
+            <span>Проблема</span>
+            <span>Решение</span>
+            <span>Доказательства</span>
+          </div>
+          ${group.items.map(item => `
+            <div class="solved-row">
+              <span>${item.problem}</span>
+              <span>${item.solution}</span>
+              <span style="color:var(--text-muted)">${item.evidence}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  container.innerHTML = `
+    <div class="hairline" style="margin-top:60px"></div>
+
+    <header class="solutions-header">
+      <span class="audit-label">Design Solutions</span>
+      <h2 class="audit-title">Дизайн-решения и обоснования</h2>
+      <p class="audit-subtitle">10 изменений интерфейса Security в DBeaver Ultimate. Каждое решение обосновано пользовательским исследованием, тикетами GitHub и документацией.</p>
+      <div class="solutions-metrics">
+        <div class="metric">
+          <div class="metric-value">16</div>
+          <div class="metric-label">проблем решено</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value critical">7</div>
+          <div class="metric-label">критичных</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value major">7</div>
+          <div class="metric-label">значимых</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value minor">2</div>
+          <div class="metric-label">минорных</div>
+        </div>
+      </div>
+      <div class="insight-card">
+        <h3 class="insight-title">Изменение иерархии: action-first вместо data-first</h3>
+        <p>В текущем интерфейсе секция «Encrypted Data» (что шифровать) расположена выше «Encryption Method» (как шифровать). Это логика разработчика: сначала определи скоуп данных, потом выбери инструмент. Для инженера который понимает архитектуру системы — это естественно. Но для дата-инженера который хочет «зайти быстро, настроить и забыть» — нет.</p>
+        <p>Исследование подтвердило: респондент не смог интерпретировать чекбоксы «Global configuration» и «Database connection credentials» пока не разобрался в методах шифрования. Понимание «что шифровать» оказалось невозможным без понимания «как шифровать».</p>
+        <p>В предложенном решении порядок изменён на пользовательский: сначала Encryption method (первичное решение, определяющее доступные действия), затем What to encrypt (вторичная детализация).</p>
+      </div>
+    </header>
+
+    <div class="hairline"></div>
+
+    <section class="ba-section">
+      <span class="ba-label">Before / After</span>
+      <div class="ba-grid">
+        <div>
+          <p class="ba-col-label">Before — текущий интерфейс DBeaver</p>
+          <div class="ba-img-wrap">
+            <img src="dbeaver-ux-audit-assets/solution-before.png" alt="Before" loading="lazy">
+          </div>
+        </div>
+        <div>
+          <p class="ba-col-label">After — предложенный редизайн</p>
+          <div class="ba-img-wrap" id="after-screenshot">
+            <img src="dbeaver-ux-audit-assets/solution-after.png" alt="After" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="hairline"></div>
+
+    <section class="audit-section">
+      <div class="section-header">
+        <span class="section-number">РЕШЕНИЯ</span>
+        <h2 class="section-name">10 ключевых изменений</h2>
+      </div>
+      <div class="section-content">
+        <div class="screenshot-wrap">
+          <div class="ba-img-wrap" id="after-screenshot-sticky">
+            <img src="dbeaver-ux-audit-assets/solution-after.png" alt="After" loading="lazy">
+            ${SOLUTIONS.map(s => `
+              <div class="dot ${s.severity}" data-solution="${s.id}" style="left:${s.x}%;top:${s.y}%">${s.num}</div>
+            `).join('')}
+          </div>
+        </div>
+        <div class="findings-grid">
+          ${SOLUTIONS.map(s => `
+            <div class="solution-card ${s.severity}" data-solution="${s.id}">
+              <div class="finding-meta">
+                <div class="finding-num ${s.severity}">${s.num}</div>
+                <span class="finding-severity ${s.severity}">${SEVERITY[s.severity].label}</span>
+              </div>
+              <h3 class="finding-title">${s.title}</h3>
+              <div class="solution-before-after">
+                <div class="solution-ba-block">
+                  <div class="solution-ba-label before">Было</div>
+                  <p class="solution-ba-text">${s.before}</p>
+                </div>
+                <div class="solution-ba-block">
+                  <div class="solution-ba-label after">Стало</div>
+                  <p class="solution-ba-text">${s.after}</p>
+                </div>
+              </div>
+              <div class="finding-tags">
+                ${renderTags(s.tags)}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </section>
+
+    <div class="hairline"></div>
+
+    <section class="solved-table-section">
+      <span class="audit-label">ИТОГОВАЯ ТАБЛИЦА РЕШЁННЫХ ПРОБЛЕМ</span>
+      <h2 class="solved-table-title" style="margin-top:16px">Решённые UX-проблемы</h2>
+      ${tableHtml}
+    </section>
+
+    <div class="hairline"></div>
+
+    <section class="conclusion-section">
+      <div class="conclusion-card">
+        <h2 class="conclusion-title">Вывод</h2>
+        <p class="conclusion-text">Предложенный интерфейс решает все 5 критичных проблем из топ-5 аудита и 11 дополнительных проблем — итого 16. Каждое решение обосновано данными: пользовательское исследование, тикеты GitHub, официальная документация DBeaver и Eclipse. Четыре решения требуют подтверждения разработчика и помечены соответственно.</p>
+        <blockquote class="conclusion-quote">«Зайти быстро, что-то кликнуть, настроить и забыть про это вообще и к этому не возвращаться.»<br><span style="font-style:normal;font-size:13px;color:var(--text-muted)">— Senior Data Engineer, 10 лет опыта</span></blockquote>
+        <div class="jobs-grid">
+          <div class="job-card">
+            <h4 class="job-title">✓ Job 1 — быстро настроить</h4>
+            <p class="job-desc">Security status → Master Password → Set password → Apply and close. Три осмысленных шага вместо шести точек замешательства.</p>
+          </div>
+          <div class="job-card">
+            <h4 class="job-title">✓ Job 2 — понять ценность</h4>
+            <p class="job-desc">Security status сразу говорит «encrypted with default key — configure for stronger protection». Ценность на первом экране.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="hairline"></div>
+
+    <section class="flow-section" style="padding:60px 0 48px">
+      <div class="section-header">
+        <span class="section-number">USER FLOW · SET PASSWORD</span>
+        <h2 class="section-name">Новый флоу задания пароля</h2>
+        <p class="section-desc">Сравнение текущего wizard-флоу из 3 модальных слоёв с новым одношаговым диалогом. Каждый экран — реальный wireframe с обоснованием.</p>
+      </div>
+
+      <div class="section-content">
+        <div class="screenshot-wrap">
+          <div class="screenshot-container" id="flow-screenshot">
+            <img src="dbeaver-ux-audit-assets/flow-screen-1.png" alt="Security status" loading="lazy" id="flow-img">
+          </div>
+          <p class="screenshot-caption" id="flow-caption">Экран 1 из 3 — Security status</p>
+        </div>
+        <div class="findings-grid">
+          <div class="flow-step active" data-flow-step="1">
+            <div class="flow-step-header">
+              <div class="flow-step-num">1</div>
+              <div class="flow-step-title">Security status</div>
+            </div>
+            <p class="flow-step-desc">Новый Security-экран. Пользователь видит Security status: Not configured. Понимает что нужно настроить. Нажимает Set password внутри карточки Master Password. Один клик — понятное действие.</p>
+          </div>
+          <div class="flow-step" data-flow-step="2">
+            <div class="flow-step-header">
+              <div class="flow-step-num">2</div>
+              <div class="flow-step-title">Set password</div>
+            </div>
+            <p class="flow-step-desc">Диалог Set DBeaver Ultimate master password. Один диалог, не три слоя. Внутри всё что нужно: поля Password и Confirm Password, видимые требования к паролю, поле Password hint. Пользователь делает всё в одном месте.</p>
+          </div>
+          <div class="flow-step" data-flow-step="3">
+            <div class="flow-step-header">
+              <div class="flow-step-num">3</div>
+              <div class="flow-step-title">Подтверждение</div>
+            </div>
+            <p class="flow-step-desc">Возврат на Security-экран. Статус обновился. Кнопка Set password сменилась на Change password и Recover password. Пользователь видит что действие выполнено.</p>
+          </div>
+
+          <div class="flow-metrics">
+            <div class="flow-metric">
+              <div class="flow-metric-value">3</div>
+              <div class="flow-metric-label">клика</div>
+            </div>
+            <div class="flow-metric">
+              <div class="flow-metric-value">1</div>
+              <div class="flow-metric-label">модальный слой</div>
+            </div>
+            <div class="flow-metric">
+              <div class="flow-metric-value">0</div>
+              <div class="flow-metric-label">пустых шагов</div>
+            </div>
+            <div class="flow-metric">
+              <div class="flow-metric-value">✓</div>
+              <div class="flow-metric-label">требования видны</div>
+            </div>
+          </div>
+
+          <div class="flow-conclusion">
+            <h2 class="conclusion-title">Вывод</h2>
+            <p>Замена wizard на простой диалог для задания пароля соответствует Eclipse UI Guidelines:</p>
+            <blockquote>«A wizard should be used if there are many steps in the task, and they must be completed in a specific order»<br><span style="font-style:normal;font-size:13px;color:var(--text-muted)">— Eclipse UI Guidelines v2, раздел Wizards</span></blockquote>
+            <p>Задание мастер-пароля — одношаговая задача (ввод + подтверждение), не требующая wizard-паттерна. Текущая реализация использует wizard с двумя пустыми шагами, нарушая рекомендации Eclipse.</p>
+            <div class="flow-sources">
+              <div class="flow-sources-label">Источники</div>
+              <a href="https://eclipse.org/articles/Article-UI-Guidelines/v200202/Contents.html" target="_blank" rel="noopener">eclipse.org/articles/Article-UI-Guidelines/v200202/Contents.html ↗</a>
+              <a href="https://eclipse-platform.github.io/ui-best-practices/" target="_blank" rel="noopener">eclipse-platform.github.io/ui-best-practices/ — раздел 8.3 Wizards ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+// ─── Solution tooltip support ───
+function showSolutionTooltip(solutionId, dotEl) {
+  const s = SOLUTIONS.find(s => s.id === solutionId);
+  if (!s) return;
+
+  activeFindingId = solutionId;
+
+  tooltipNum.textContent = s.num;
+  tooltipNum.className = 'finding-num ' + s.severity;
+  tooltipSeverity.textContent = SEVERITY[s.severity].label;
+  tooltipSeverity.className = 'finding-severity ' + s.severity;
+  tooltipTitle.textContent = s.title;
+  tooltipDesc.innerHTML = '<strong style="color:var(--text-muted)">Было:</strong> ' + s.before + '<br><strong style="color:var(--text-primary)">Стало:</strong> ' + s.after;
+  tooltipTags.innerHTML = renderTags(s.tags);
+
+  tooltip.classList.add('visible');
+  positionTooltip(dotEl);
+
+  document.querySelectorAll('.dot.active, .solution-card.active').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll(`.dot[data-solution="${solutionId}"]`).forEach(d => d.classList.add('active'));
+  const card = document.querySelector(`.solution-card[data-solution="${solutionId}"]`);
+  if (card) card.classList.add('active');
+}
+
+// ─── Init ───
+renderSections();
+renderSolutions();
+
+// Lightbox
+const lightbox = document.createElement('div');
+lightbox.className = 'lightbox';
+lightbox.innerHTML = '<img>';
+document.body.appendChild(lightbox);
+const lightboxImg = lightbox.querySelector('img');
+
+document.addEventListener('click', (e) => {
+  if (e.target.tagName === 'IMG' && e.target.closest('.ba-img-wrap')) {
+    lightboxImg.src = e.target.src;
+    lightboxImg.alt = e.target.alt;
+    lightbox.classList.add('visible');
+    document.body.style.overflow = 'hidden';
+    return;
+  }
+});
+lightbox.addEventListener('click', () => {
+  lightbox.classList.remove('visible');
+  document.body.style.overflow = '';
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && lightbox.classList.contains('visible')) {
+    lightbox.classList.remove('visible');
+    document.body.style.overflow = '';
+  }
+});
+
+</script>
+
+<button class="scroll-top" aria-label="Наверх" onclick="document.querySelector('.hero').scrollIntoView({behavior:'smooth'})"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 15V3M9 3L3 9M9 3L15 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+
+<script>
+window.addEventListener('scroll', () => {
+  document.querySelector('.scroll-top').classList.toggle('visible', window.scrollY > window.innerHeight);
+}, {passive: true});
+</script>
+
+<footer class="site-footer">
+  <p class="footer-thanks">Спасибо за просмотр</p>
+  <p class="footer-name">Анастасия Покатилова</p>
+  <div class="footer-links">
+    <a href="https://t.me/epic_amber" target="_blank" rel="noopener">Telegram ↗</a>
+    <a href="https://a-pokatilova.space/" target="_blank" rel="noopener">Портфолио ↗</a>
+  </div>
+</footer>
+
+</body>
+</html>
