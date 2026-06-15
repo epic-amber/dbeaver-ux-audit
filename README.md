@@ -2,7 +2,7 @@
 
 Интерактивный UX-аудит экранов **Preferences → Security** в DBeaver Ultimate 26.1.0 (macOS).
 
-**[Открыть полное исследование в Figma →](https://www.figma.com/design/fye36sRLiAdEAWCDwP4hIx/Test-assignment.-Security-page?node-id=0-1&t=3wqObvQrnV9PulNh-1)**
+**[Открыть полное исследование в Figma →](https://www.figma.com/design/fye36sRLiAdEAWCDwP4hIx/Test-assignment.-Security-page?node-id=0-1&t=GcWwthzBG4t5Pfpc-1)**
 
 ## Что внутри
 
