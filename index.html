@@ -998,7 +998,7 @@ a.tag:hover {
     gap: 16px;
   }
   .audit-header { padding: 48px 0 32px; }
-  .dot { --dot-size: 24px; font-size: 10px; }
+  .dot { --dot-size: 24px; font-size: 10px; min-width: 36px; min-height: 36px; }
   .ba-grid { grid-template-columns: 1fr; }
   .solutions-metrics { flex-wrap: wrap; gap: 24px; }
   .solution-before-after { grid-template-columns: 1fr; }
@@ -1451,6 +1451,7 @@ const tooltipDesc = document.getElementById('tooltip-desc');
 const tooltipTags = document.getElementById('tooltip-tags');
 
 let activeFindingId = null;
+let tooltipScrollY = 0;
 
 function showTooltip(findingId, dotEl) {
   const f = FINDINGS.find(f => f.id === findingId);
@@ -1468,6 +1469,7 @@ function showTooltip(findingId, dotEl) {
 
   tooltip.classList.add('visible');
   positionTooltip(dotEl);
+  tooltipScrollY = window.scrollY;
   highlightFinding(findingId);
 }
 
@@ -1479,7 +1481,7 @@ function hideTooltip() {
 }
 
 window.addEventListener('scroll', () => {
-  if (activeFindingId !== null) hideTooltip();
+  if (activeFindingId !== null && Math.abs(window.scrollY - tooltipScrollY) > 50) hideTooltip();
 }, {passive: true});
 
 function positionTooltip(dotEl) {
@@ -2039,6 +2041,7 @@ function showSolutionTooltip(solutionId, dotEl) {
 
   tooltip.classList.add('visible');
   positionTooltip(dotEl);
+  tooltipScrollY = window.scrollY;
 
   document.querySelectorAll('.dot.active, .solution-card.active').forEach(el => el.classList.remove('active'));
   document.querySelectorAll(`.dot[data-solution="${solutionId}"]`).forEach(d => d.classList.add('active'));
