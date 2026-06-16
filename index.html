@@ -893,6 +893,63 @@ a.tag:hover {
 .scroll-top.visible { opacity: 1; pointer-events: auto; }
 .scroll-top:hover { background: rgba(255,255,255,0.18); }
 
+/* ─── Outcomes ─── */
+.outcomes-section { padding: 60px 0; }
+.outcomes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 32px;
+}
+.outcome-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 24px;
+}
+.outcome-card.full-width { grid-column: 1 / -1; }
+.outcome-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: #22C55E;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.outcome-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-top: 12px;
+}
+.outcome-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-top: 8px;
+}
+.outcome-divider {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+}
+.outcome-divider::before {
+  content: '';
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #22C55E;
+}
+.outcome-divider-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #22C55E;
+}
+
 /* ─── Footer ─── */
 .site-footer {
   border-top: 1px solid #2A2A2A;
@@ -953,6 +1010,7 @@ a.tag:hover {
   .flow-steps { grid-template-columns: 1fr; }
   .flow-metrics { grid-template-columns: repeat(2, 1fr); }
   .flow-conclusion { padding: 24px; }
+  .outcomes-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 480px) {
@@ -1903,6 +1961,61 @@ function renderSolutions() {
               <a href="https://eclipse-platform.github.io/ui-best-practices/" target="_blank" rel="noopener">eclipse-platform.github.io/ui-best-practices/ — раздел 8.3 Wizards ↗</a>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="hairline"></div>
+
+    <section class="outcomes-section">
+      <span class="audit-label">EXPECTED OUTCOMES</span>
+      <h2 class="audit-title" style="margin-top:16px">Предполагаемый результат</h2>
+      <div class="outcomes-grid">
+        <div class="outcome-card">
+          <div class="outcome-num">1</div>
+          <h3 class="outcome-title">Первичная настройка безопасности — из 20+ минут в 3 шага</h3>
+          <p class="outcome-desc">Пользователь открывает Security, видит статус «Not configured», нажимает Set password, задаёт пароль в одном диалоге. Без пустых wizard-шагов, без трёх слоёв модальных окон, без поиска нужной кнопки среди равнозначных элементов.</p>
+        </div>
+        <div class="outcome-card">
+          <div class="outcome-num">2</div>
+          <h3 class="outcome-title">Ноль ложного чувства безопасности</h3>
+          <p class="outcome-desc">Статус-индикатор явно показывает настроена защита или нет. Пользователь больше не думает что данные защищены мастер-паролем когда они зашифрованы публично доступным DES-ключом.</p>
+        </div>
+        <div class="outcome-card">
+          <div class="outcome-num">3</div>
+          <h3 class="outcome-title">Снижение риска случайной потери credentials</h3>
+          <p class="outcome-desc">Деструктивное действие изолировано в отдельную секцию с описанием последствий. Альтернативный путь удаления через Eclipse Viewer закрыт — кнопка заменена на ссылку Advanced storage settings. Один путь удаления вместо двух.</p>
+        </div>
+        <div class="outcome-card">
+          <div class="outcome-num">4</div>
+          <h3 class="outcome-title">Осознанный выбор метода шифрования</h3>
+          <p class="outcome-desc">Методы визуально дифференцированы: Recommended для Master Password, Headless для Automation. Пользователь не выберет небезопасный метод случайно — не прочитав описание.</p>
+        </div>
+        <div class="outcome-card">
+          <div class="outcome-num">5</div>
+          <h3 class="outcome-title">Предупреждение о непереносимости до действия, а не после</h3>
+          <p class="outcome-desc">Баннер о привязке к ОС видимый с первого экрана. Пользователь узнаёт об ограничении до настройки, а не при смене машины когда credentials уже потеряны.</p>
+        </div>
+        <div class="outcome-card">
+          <div class="outcome-num">6</div>
+          <h3 class="outcome-title">Задание пароля — 1 диалог вместо 3 экранов</h3>
+          <p class="outcome-desc">Change Password wizard с двумя пустыми шагами заменён на один диалог с видимыми требованиями к паролю, объяснением ценности и полем для подсказки восстановления. Три клика вместо восьми.</p>
+        </div>
+        <div class="outcome-card full-width">
+          <div class="outcome-num">7</div>
+          <h3 class="outcome-title">Интерфейс объясняет себя сам</h3>
+          <p class="outcome-desc">Новые тексты (UX writing) для каждого элемента: описания методов, пояснения к disabled-кнопкам, конкретный перечень что входит в шифрование вместо абстрактного «credentials». Пользователь понимает экран с минимальным обращением к документации.</p>
+        </div>
+        <div class="outcome-divider"><span class="outcome-divider-text">Бизнес-результат</span></div>
+        <div class="outcome-card">
+          <div class="outcome-num">8</div>
+          <h3 class="outcome-title">Снижение нагрузки на поддержку</h3>
+          <p class="outcome-desc">Проблемы которые сейчас генерируют тикеты (#23084 — петля с паролем, #7211 — окно не закрывается, #19928 — Restore Defaults не работает) решены на уровне интерфейса. Пользователь который понимает экран не пишет в support.</p>
+        </div>
+        <div class="outcome-card">
+          <div class="outcome-num">9</div>
+          <h3 class="outcome-title">Доверие к продукту</h3>
+          <p class="outcome-desc">Security — экран который формирует отношение пользователя к безопасности всего продукта. Если экран настройки безопасности выглядит запутанным, содержит ложные элементы управления и скрывает предупреждения — пользователь переносит это недоверие на продукт в целом. Понятный Security-экран работает на восприятие DBeaver как надёжного инструмента для работы с production-данными.</p>
         </div>
       </div>
     </section>
