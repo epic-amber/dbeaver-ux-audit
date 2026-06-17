@@ -43,6 +43,65 @@
   --radius-lg: 16px;
   --max-width: 1200px;
   --dot-size: 28px;
+  --bg-tooltip: #252525;
+  --border-tooltip: rgba(255,255,255,0.15);
+  --shadow-tooltip: 0 16px 48px rgba(0,0,0,0.5), 0 4px 12px rgba(0,0,0,0.3);
+  --bg-screenshot: #000;
+  --dot-border: rgba(255,255,255,0.25);
+  --dot-hover-shadow: rgba(255,255,255,0.15);
+  --dot-active-shadow: rgba(255,255,255,0.2);
+  --bg-overlay: rgba(255,255,255,0.04);
+  --bg-overlay-hover: rgba(255,255,255,0.08);
+  --accent: #2C7BE5;
+  --accent-hover: #1a6ad4;
+  --btn-secondary-border: #555;
+  --btn-secondary-border-hover: #999;
+  --hero-text: #fff;
+  --scroll-top-bg: rgba(255,255,255,0.1);
+  --scroll-top-hover: rgba(255,255,255,0.18);
+  --footer-bg: #111;
+  --footer-border: #2A2A2A;
+  --footer-name: #8C8C8C;
+  --lightbox-bg: rgba(0,0,0,0.9);
+}
+
+html[data-theme="light"] {
+  --bg-page: #FAFAF8;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #F5F5F3;
+  --border-subtle: rgba(0,0,0,0.08);
+  --border-medium: rgba(0,0,0,0.12);
+  --text-primary: #1A1A1A;
+  --text-secondary: rgba(0,0,0,0.55);
+  --text-muted: rgba(0,0,0,0.4);
+  --critical: #DC2626;
+  --critical-bg: rgba(220,38,38,0.08);
+  --major: #EA580C;
+  --major-bg: rgba(234,88,12,0.08);
+  --minor: #CA8A04;
+  --minor-bg: rgba(202,138,4,0.08);
+  --tag-bg: rgba(0,0,0,0.03);
+  --tag-border: rgba(0,0,0,0.10);
+  --bg-tooltip: #FFFFFF;
+  --border-tooltip: rgba(0,0,0,0.12);
+  --shadow-tooltip: 0 16px 48px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.08);
+  --bg-screenshot: #F0F0EE;
+  --dot-border: rgba(255,255,255,0.5);
+  --dot-hover-shadow: rgba(0,0,0,0.1);
+  --dot-active-shadow: rgba(0,0,0,0.15);
+  --bg-overlay: rgba(0,0,0,0.03);
+  --bg-overlay-hover: rgba(0,0,0,0.06);
+  --accent: #2563EB;
+  --accent-hover: #1D4ED8;
+  --btn-secondary-border: #D1D5DB;
+  --btn-secondary-border-hover: #9CA3AF;
+  --hero-text: #1A1A1A;
+  --scroll-top-bg: rgba(0,0,0,0.08);
+  --scroll-top-hover: rgba(0,0,0,0.14);
+  --footer-bg: #F3F3F1;
+  --footer-border: rgba(0,0,0,0.08);
+  --footer-name: #6B7280;
+  --lightbox-bg: rgba(255,255,255,0.95);
 }
 
 html { scroll-behavior: auto; }
@@ -74,7 +133,7 @@ body {
 }
 .hero h1 { font-size: clamp(40px, 6vw, 72px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
 .hero .author { font-size: 18px; color: var(--text-secondary); margin-top: 24px; }
-.hero .link-brief { display: inline-block; font-size: 14px; color: #2C7BE5; margin-top: 12px; text-decoration: none; }
+.hero .link-brief { display: inline-block; font-size: 14px; color: var(--accent); margin-top: 12px; text-decoration: none; }
 .hero .link-brief:hover { text-decoration: underline; }
 .hero .description { max-width: 720px; font-size: 18px; color: var(--text-secondary); line-height: 1.7; margin-top: 36px; }
 .hero-actions { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 40px; }
@@ -85,17 +144,17 @@ body {
   transition: background 0.15s, border-color 0.15s;
 }
 .hero-btn-primary {
-  background: #2C7BE5; color: #fff; border: none; font-weight: 600;
+  background: var(--accent); color: #fff; border: none; font-weight: 600;
 }
-.hero-btn-primary:hover { background: #1a6ad4; }
+.hero-btn-primary:hover { background: var(--accent-hover); }
 .hero-btn-secondary {
-  display: block; background: transparent; color: #fff; border: 1px solid #555; font-weight: 500;
+  display: block; background: transparent; color: var(--hero-text); border: 1px solid var(--btn-secondary-border); font-weight: 500;
 }
-.hero-btn-secondary:hover { border-color: #999; }
+.hero-btn-secondary:hover { border-color: var(--btn-secondary-border-hover); }
 .figma-tags { font-size: 12px; color: var(--text-muted); margin-top: -4px; }
 .scroll-hint {
   position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
-  font-size: 24px; color: #fff; opacity: 0.85; animation: bounce 2s infinite;
+  font-size: 24px; color: var(--hero-text); opacity: 0.85; animation: bounce 2s infinite;
 }
 @keyframes bounce {
   0%, 100% { transform: translateX(-50%) translateY(0); }
@@ -229,7 +288,7 @@ body {
   position: relative;
   border-radius: var(--radius-md);
   overflow: hidden;
-  background: #000;
+  background: var(--bg-screenshot);
 }
 .screenshot-container img {
   display: block;
@@ -259,15 +318,15 @@ body {
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   z-index: 2;
   user-select: none;
-  border: 2px solid rgba(255,255,255,0.25);
+  border: 2px solid var(--dot-border);
 }
 .dot:hover {
   transform: translate(-50%, -50%) scale(1.15);
-  box-shadow: 0 0 0 4px rgba(255,255,255,0.15);
+  box-shadow: 0 0 0 4px var(--dot-hover-shadow);
 }
 .dot.active {
   transform: translate(-50%, -50%) scale(1.2);
-  box-shadow: 0 0 0 6px rgba(255,255,255,0.2);
+  box-shadow: 0 0 0 6px var(--dot-active-shadow);
   z-index: 10;
 }
 .dot.critical { background: var(--critical); }
@@ -371,7 +430,7 @@ body {
   white-space: nowrap;
 }
 a.tag:hover {
-  background: rgba(255,255,255,0.08);
+  background: var(--bg-overlay-hover);
   color: var(--text-primary);
 }
 .tag-plain {
@@ -403,11 +462,11 @@ a.tag:hover {
   z-index: 1000;
   width: 340px;
   max-width: calc(100vw - 32px);
-  background: #252525;
-  border: 1px solid rgba(255,255,255,0.15);
+  background: var(--bg-tooltip);
+  border: 1px solid var(--border-tooltip);
   border-radius: var(--radius-md);
   padding: 20px;
-  box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 4px 12px rgba(0,0,0,0.3);
+  box-shadow: var(--shadow-tooltip);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.15s ease, transform 0.15s ease;
@@ -422,8 +481,8 @@ a.tag:hover {
   position: absolute;
   width: 12px;
   height: 12px;
-  background: #252525;
-  border: 1px solid rgba(255,255,255,0.15);
+  background: var(--bg-tooltip);
+  border: 1px solid var(--border-tooltip);
   transform: rotate(45deg);
   z-index: -1;
 }
@@ -473,7 +532,7 @@ a.tag:hover {
 .insight-card {
   margin-top: 40px;
   padding: 28px 32px;
-  background: rgba(255,255,255,0.04);
+  background: var(--bg-overlay);
   border-left: 4px solid var(--major);
   border-radius: 0 var(--radius-md) var(--radius-md) 0;
 }
@@ -539,7 +598,7 @@ a.tag:hover {
   position: fixed;
   inset: 0;
   z-index: 2000;
-  background: rgba(0,0,0,0.9);
+  background: var(--lightbox-bg);
   align-items: center;
   justify-content: center;
   cursor: zoom-out;
@@ -718,7 +777,7 @@ a.tag:hover {
   gap: 16px;
 }
 .job-card {
-  background: rgba(255,255,255,0.03);
+  background: var(--bg-overlay);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   padding: 20px;
@@ -734,18 +793,19 @@ a.tag:hover {
   line-height: 1.6;
   color: var(--text-secondary);
 }
+
 .conclusion-figma-link {
   display: inline-block;
   margin-top: 24px;
   font-size: 15px;
-  color: #2C7BE5;
+  color: var(--accent);
   text-decoration: none;
   transition: color 0.15s;
 }
 .conclusion-figma-link:hover { text-decoration: underline; }
 
 /* ─── Flow section ─── */
-.flow-screenshot { border-radius: var(--radius-md); overflow: hidden; background: #000; }
+.flow-screenshot { border-radius: var(--radius-md); overflow: hidden; background: var(--bg-screenshot); }
 .flow-screenshot img { display: block; width: 100%; height: auto; }
 #flow-screenshot img { cursor: zoom-in; }
 .flow-steps {
@@ -875,9 +935,9 @@ a.tag:hover {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.15);
-  color: #fff;
+  background: var(--scroll-top-bg);
+  border: 1px solid var(--border-tooltip);
+  color: var(--hero-text);
   font-size: 20px;
   display: flex;
   align-items: center;
@@ -891,7 +951,8 @@ a.tag:hover {
   -webkit-backdrop-filter: blur(8px);
 }
 .scroll-top.visible { opacity: 1; pointer-events: auto; }
-.scroll-top:hover { background: rgba(255,255,255,0.18); }
+.scroll-top:hover { background: var(--scroll-top-hover); }
+html[data-theme="light"] .scroll-top { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
 
 /* ─── Outcomes ─── */
 .outcomes-section { padding: 60px 0; }
@@ -902,7 +963,7 @@ a.tag:hover {
   margin-top: 32px;
 }
 .outcome-card {
-  background: rgba(255,255,255,0.03);
+  background: var(--bg-overlay);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   padding: 24px;
@@ -952,21 +1013,21 @@ a.tag:hover {
 
 /* ─── Footer ─── */
 .site-footer {
-  border-top: 1px solid #2A2A2A;
-  background: #111;
+  border-top: 1px solid var(--footer-border);
+  background: var(--footer-bg);
   padding: 120px 24px;
   text-align: center;
 }
 .footer-thanks {
   font-size: 56px;
   font-weight: 500;
-  color: #fff;
+  color: var(--text-primary);
   letter-spacing: -0.02em;
   line-height: 1.2;
 }
 .footer-name {
   font-size: 18px;
-  color: #8C8C8C;
+  color: var(--footer-name);
   margin-top: 16px;
 }
 .footer-links {
@@ -977,10 +1038,87 @@ a.tag:hover {
 }
 .footer-links a {
   font-size: 16px;
-  color: #2C7BE5;
+  color: var(--accent);
   text-decoration: none;
 }
 .footer-links a:hover { text-decoration: underline; }
+
+/* ─── Site Header ─── */
+.site-header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 16px 24px;
+  z-index: 100;
+  pointer-events: none;
+}
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  pointer-events: auto;
+}
+.header-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s;
+}
+.header-btn:hover {
+  color: var(--text-primary);
+}
+.icon-moon { display: none; }
+html[data-theme="light"] .icon-sun { display: none; }
+html[data-theme="light"] .icon-moon { display: block; }
+
+/* ─── Language Toggle ─── */
+.lang-toggle {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px 0;
+  font: 500 13px/1 var(--font);
+  letter-spacing: 0.02em;
+  transition: color 0.15s;
+  position: relative;
+}
+.lang-toggle:hover { color: var(--text-primary); }
+.lang-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 4px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 4px 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  display: none;
+  min-width: 100px;
+}
+.lang-dropdown.open { display: block; }
+.lang-option {
+  display: block;
+  width: 100%;
+  padding: 8px 16px;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font: 400 13px/1 var(--font);
+  cursor: pointer;
+  text-align: left;
+}
+.lang-option:hover { background: var(--bg-overlay); color: var(--text-primary); }
+.lang-option.active { color: var(--text-primary); font-weight: 600; }
 
 /* ─── Responsive ─── */
 @media (max-width: 900px) {
@@ -1021,12 +1159,28 @@ a.tag:hover {
 </head>
 <body>
 
+<nav class="site-header">
+  <div class="header-actions">
+    <div class="lang-toggle" id="lang-toggle">
+      <span id="lang-current">RU</span>
+      <div class="lang-dropdown" id="lang-dropdown">
+        <button class="lang-option active" data-lang="ru">Русский</button>
+        <button class="lang-option" data-lang="en">English</button>
+      </div>
+    </div>
+    <button class="header-btn" id="theme-toggle" aria-label="Переключить тему">
+      <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </div>
+</nav>
+
 <header class="hero">
   <h1>Test Assignment · UX Designer</h1>
-  <p class="author">Анастасия Покатилова · Senior Product UX/UI Designer</p>
-  <p class="description">Результаты UX-аудита и финальное дизайн-решение для Preferences → Security в DBeaver Ultimate 26.1.0 (macOS). Кликайте на цветные точки на скриншотах чтобы увидеть карточки с проблемами. Полное исследование с JTBD, User Research, User Scenario можно посмотреть в <a href="https://www.figma.com/design/fye36sRLiAdEAWCDwP4hIx/Test-assignment.-Security-page?node-id=0-1&t=GcWwthzBG4t5Pfpc-1" target="_blank" rel="noopener" style="color:#2C7BE5;text-decoration:none">Figma</a>.</p>
+  <p class="author" data-i18n="hero.author">Анастасия Покатилова · Senior Product UX/UI Designer</p>
+  <p class="description" data-i18n-html="hero.description">Результаты UX-аудита и финальное дизайн-решение для Preferences → Security в DBeaver Ultimate 26.1.0 (macOS). Кликайте на цветные точки на скриншотах чтобы увидеть карточки с проблемами. Полное исследование с JTBD, User Research, User Scenario можно посмотреть в <a href="https://www.figma.com/design/fye36sRLiAdEAWCDwP4hIx/Test-assignment.-Security-page?node-id=0-1&t=GcWwthzBG4t5Pfpc-1" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none">Figma</a>.</p>
   <div class="scroll-hint">↓</div>
-  <p class="hero-note">Рекомендуется просмотр на десктопе</p>
+  <p class="hero-note" data-i18n="hero.note">Рекомендуется просмотр на десктопе</p>
 </header>
 
 <div class="container" id="audit">
@@ -1034,36 +1188,36 @@ a.tag:hover {
   <!-- Header -->
   <header class="audit-header">
     <span class="audit-label">UX Audit · Security Screen</span>
-    <h1 class="audit-title">Анализ UX проблем</h1>
-    <p class="audit-subtitle">Найдены проблемы трёх уровней важности — от блокеров до минорных. Для редизайна сосредоточилась на 10 ключевых, которые напрямую влияют на основной пользовательский сценарий: настроить защиту credentials и вернуться к работе. Дополнительно провела аудит и предложила редизайн для флоу Change Password — трёхшагового wizard с двумя пустыми экранами</p>
+    <h1 class="audit-title" data-i18n="audit.title">Анализ UX проблем</h1>
+    <p class="audit-subtitle" data-i18n="audit.subtitle">Найдены проблемы трёх уровней важности — от блокеров до минорных. Для редизайна сосредоточилась на 10 ключевых, которые напрямую влияют на основной пользовательский сценарий: настроить защиту credentials и вернуться к работе. Дополнительно провела аудит и предложила редизайн для флоу Change Password — трёхшагового wizard с двумя пустыми экранами</p>
   </header>
 
   <div class="hairline"></div>
 
   <!-- Legend -->
   <section class="legend">
-    <span class="legend-label">Уровни проблем</span>
+    <span class="legend-label" data-i18n="legend.label">Уровни проблем</span>
     <div class="legend-items">
       <div class="legend-item">
         <div class="legend-item-head">
           <div class="legend-dot critical"></div>
           <span class="legend-name">Critical</span>
         </div>
-        <p class="legend-desc">Блокирует пользователя или угрожает данным. Чинить срочно.</p>
+        <p class="legend-desc" data-i18n="legend.critical">Блокирует пользователя или угрожает данным. Чинить срочно.</p>
       </div>
       <div class="legend-item">
         <div class="legend-item-head">
           <div class="legend-dot major"></div>
           <span class="legend-name">Major</span>
         </div>
-        <p class="legend-desc">Затрудняет работу, но не мешает довести задачу до конца.</p>
+        <p class="legend-desc" data-i18n="legend.major">Затрудняет работу, но не мешает довести задачу до конца.</p>
       </div>
       <div class="legend-item">
         <div class="legend-item-head">
           <div class="legend-dot minor"></div>
           <span class="legend-name">Minor</span>
         </div>
-        <p class="legend-desc">Визуальный шум и мелкие неудобства. Низкий приоритет.</p>
+        <p class="legend-desc" data-i18n="legend.minor">Визуальный шум и мелкие неудобства. Низкий приоритет.</p>
       </div>
     </div>
   </section>
@@ -1091,291 +1245,665 @@ a.tag:hover {
 </div>
 
 <script>
+(function(){var t=localStorage.getItem('theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');var l=localStorage.getItem('lang')||'ru';document.documentElement.lang=l;})();
+</script>
+<script>
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
+let currentLang = localStorage.getItem('lang') || 'ru';
+
 const SEVERITY = {
   critical: { color: '#EA0000', label: 'CRITICAL' },
   major:    { color: '#FF8018', label: 'MAJOR' },
   minor:    { color: '#FACC15', label: 'MINOR' }
 };
 
-const SECTIONS = [
-  {
-    id: 1,
-    number: '01',
-    label: '01. ЭКРАН',
-    name: 'Security',
-    desc: 'Preferences → General → Security. Главный экран настройки безопасности в DBeaver Ultimate. Цветные точки на скриншоте — найденные проблемы с указанием уровня важности.',
-    image: 'dbeaver-ux-audit-assets/01-security.png',
-    caption: 'DBeaver Ultimate 26.1.0 — General → Security'
+// ─── UI_TEXT: static text translations ───
+const UI_TEXT = {
+  ru: {
+    'hero.author': 'Анастасия Покатилова · Senior Product UX/UI Designer',
+    'hero.description': 'Результаты UX-аудита и финальное дизайн-решение для Preferences → Security в DBeaver Ultimate 26.1.0 (macOS). Кликайте на цветные точки на скриншотах чтобы увидеть карточки с проблемами. Полное исследование с JTBD, User Research, User Scenario можно посмотреть в <a href="https://www.figma.com/design/fye36sRLiAdEAWCDwP4hIx/Test-assignment.-Security-page?node-id=0-1&t=GcWwthzBG4t5Pfpc-1" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none">Figma</a>.',
+    'hero.note': 'Рекомендуется просмотр на десктопе',
+    'audit.title': 'Анализ UX проблем',
+    'audit.subtitle': 'Найдены проблемы трёх уровней важности — от блокеров до минорных. Для редизайна сосредоточилась на 10 ключевых, которые напрямую влияют на основной пользовательский сценарий: настроить защиту credentials и вернуться к работе. Дополнительно провела аудит и предложила редизайн для флоу Change Password — трёхшагового wizard с двумя пустыми экранами',
+    'legend.label': 'Уровни проблем',
+    'legend.critical': 'Блокирует пользователя или угрожает данным. Чинить срочно.',
+    'legend.major': 'Затрудняет работу, но не мешает довести задачу до конца.',
+    'legend.minor': 'Визуальный шум и мелкие неудобства. Низкий приоритет.',
+    'footer.thanks': 'Спасибо за просмотр',
+    'footer.name': 'Анастасия Покатилова',
+    'footer.portfolio': 'Портфолио ↗',
+    'solutions.label': 'Design Solutions',
+    'solutions.title': 'Дизайн-решения и обоснования',
+    'solutions.subtitle': 'Редизайн решает 10 проблем на основном экране Security — 6 критичных, 3 значимых и 1 минорную. Помимо структурных изменений, предложены новые тексты интерфейса (UX writing): описания методов шифрования, пояснения к кнопкам, предупреждения о последствиях действий — чтобы пользователь понимал что происходит на каждом шаге с минимальным обращением к документации. Остальные проблемы относятся к вложенным экранам (Change Password wizard, Eclipse Secure Storage Viewer) и платформенным ограничениям Eclipse RCP. Они разобраны в рамках UX-аудита с обоснованиями и ссылками на документацию, но их реализация выходит за рамки редизайна одного экрана и требует отдельных задач разработки. Каждое решение обосновано пользовательским исследованием, тикетами GitHub и документацией.',
+    'solutions.metrics.critical': 'критичных',
+    'solutions.metrics.major': 'значимых',
+    'solutions.metrics.minor': 'минорная',
+    'solutions.metrics.solved': 'проблем решено',
+    'solutions.insight.title': 'Изменение иерархии: action-first вместо data-first',
+    'solutions.insight.p1': 'В текущем интерфейсе секция «Encrypted Data» (что шифровать) расположена выше «Encryption Method» (как шифровать). Это логика разработчика: сначала определи скоуп данных, потом выбери инструмент. Для инженера который понимает архитектуру системы — это естественно. Но для дата-инженера который хочет «зайти быстро, настроить и забыть» — нет.',
+    'solutions.insight.p2': 'Исследование подтвердило: респондент не смог интерпретировать чекбоксы «Global configuration» и «Database connection credentials» пока не разобрался в методах шифрования. Понимание «что шифровать» оказалось невозможным без понимания «как шифровать».',
+    'solutions.insight.p3': 'В предложенном решении порядок изменён на пользовательский: сначала Encryption method (первичное решение, определяющее доступные действия), затем What to encrypt (вторичная детализация).',
+    'solutions.ba.label': 'Before / After',
+    'solutions.ba.before': 'Before — текущий интерфейс DBeaver',
+    'solutions.ba.after': 'After — предложенный редизайн',
+    'solutions.changes.label': 'РЕШЕНИЯ',
+    'solutions.changes.name': 'Ключевые изменения',
+    'solutions.was': 'Было',
+    'solutions.became': 'Стало',
+    'solutions.table.label': 'ИТОГОВАЯ ТАБЛИЦА РЕШЁННЫХ ПРОБЛЕМ',
+    'solutions.table.title': 'Решённые UX-проблемы',
+    'solutions.table.problem': 'Проблема',
+    'solutions.table.solution': 'Решение',
+    'solutions.table.evidence': 'Доказательства',
+    'solutions.conclusion.title': 'Вывод',
+    'solutions.conclusion.text': 'Предложенный интерфейс решает 10 проблем на основном экране Security — 6 критичных, 3 значимых и 1 минорную. Каждое решение обосновано данными: пользовательское исследование, тикеты GitHub, официальная документация DBeaver и Eclipse. Четыре решения требуют подтверждения разработчика и помечены соответственно.',
+    'solutions.conclusion.job1.title': '✓ Job 1 — быстро настроить',
+    'solutions.conclusion.job1.desc': 'Security status → Master Password → Set password → Apply and close. Три осмысленных шага вместо шести точек замешательства.',
+    'solutions.conclusion.job2.title': '✓ Job 2 — понять ценность',
+    'solutions.conclusion.job2.desc': 'Security status сразу говорит «encrypted with default key — configure for stronger protection». Ценность на первом экране.',
+    'solutions.conclusion.figma': 'Посмотреть полное исследование в Figma ↗',
+    'flow.label': 'USER FLOW · SET PASSWORD',
+    'flow.title': 'Новый флоу задания пароля',
+    'flow.desc': 'Сравнение текущего wizard-флоу из 3 модальных слоёв с новым одношаговым диалогом. Каждый экран — реальный wireframe с обоснованием.',
+    'flow.conclusion.title': 'Вывод',
+    'flow.conclusion.intro': 'Замена wizard на простой диалог для задания пароля соответствует Eclipse UI Guidelines:',
+    'flow.conclusion.quote': '«A wizard should be used if there are many steps in the task, and they must be completed in a specific order»',
+    'flow.conclusion.quoteSource': '— Eclipse UI Guidelines v2, раздел Wizards',
+    'flow.conclusion.text': 'Задание мастер-пароля — одношаговая задача (ввод + подтверждение), не требующая wizard-паттерна. Текущая реализация использует wizard с двумя пустыми шагами, нарушая рекомендации Eclipse.',
+    'flow.sources.label': 'Источники',
+    'outcomes.label': 'EXPECTED OUTCOMES',
+    'outcomes.title': 'Предполагаемый результат',
+    'outcomes.business': 'Бизнес-результат'
   },
-  {
-    id: 2,
-    number: '02',
-    label: '02. ЭКРАН',
-    name: 'See what secured data was saved',
-    desc: 'Что открывается при клике «See what secured data was saved» — Eclipse Secure Storage Viewer. Технический экран Eclipse, выведенный наружу без адаптации под пользователей DBeaver.',
-    image: 'dbeaver-ux-audit-assets/02-saved-data.png',
-    caption: 'Eclipse Secure Storage Viewer',
-    note: {
-      title: 'Конфликт с документацией',
-      text: 'Документация Eclipse: «Typically you will have no reason to alter the preferences on this page. The options here are mostly for troubleshooting.» Документация DBeaver называет это «Advanced mode» — но кнопка на основном экране без пометки.'
+  en: {
+    'hero.author': 'Anastasia Pokatilova · Senior Product UX/UI Designer',
+    'hero.description': 'UX audit results and final design solution for Preferences → Security in DBeaver Ultimate 26.1.0 (macOS). Click on colored dots on the screenshots to see issue cards. Full research with JTBD, User Research, User Scenario is available in <a href="https://www.figma.com/design/fye36sRLiAdEAWCDwP4hIx/Test-assignment.-Security-page?node-id=0-1&t=GcWwthzBG4t5Pfpc-1" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none">Figma</a>.',
+    'hero.note': 'Best viewed on desktop',
+    'audit.title': 'UX Problem Analysis',
+    'audit.subtitle': 'Issues found across three severity levels — from blockers to minor. For the redesign, I focused on 10 key problems that directly impact the primary user scenario: configure credential protection and get back to work. Additionally, I audited and proposed a redesign for the Change Password flow — a three-step wizard with two empty screens',
+    'legend.label': 'Severity Levels',
+    'legend.critical': 'Blocks the user or threatens data. Fix immediately.',
+    'legend.major': 'Hinders the workflow but doesn\'t prevent task completion.',
+    'legend.minor': 'Visual noise and minor inconveniences. Low priority.',
+    'footer.thanks': 'Thank you for viewing',
+    'footer.name': 'Anastasia Pokatilova',
+    'footer.portfolio': 'Portfolio ↗',
+    'solutions.label': 'Design Solutions',
+    'solutions.title': 'Design Solutions & Rationale',
+    'solutions.subtitle': 'The redesign addresses 10 issues on the main Security screen — 6 critical, 3 major, and 1 minor. Beyond structural changes, new interface copy (UX writing) is proposed: encryption method descriptions, button explanations, consequence warnings — so the user understands what\'s happening at every step with minimal reference to documentation. Remaining issues belong to nested screens (Change Password wizard, Eclipse Secure Storage Viewer) and Eclipse RCP platform constraints. They are analyzed in the UX audit with rationale and documentation links, but their implementation goes beyond a single screen redesign and requires separate development tasks. Each solution is backed by user research, GitHub issues, and documentation.',
+    'solutions.metrics.critical': 'critical',
+    'solutions.metrics.major': 'major',
+    'solutions.metrics.minor': 'minor',
+    'solutions.metrics.solved': 'issues solved',
+    'solutions.insight.title': 'Hierarchy shift: action-first instead of data-first',
+    'solutions.insight.p1': 'In the current interface, the "Encrypted Data" section (what to encrypt) is placed above "Encryption Method" (how to encrypt). This is developer logic: first define the data scope, then choose the tool. For an engineer who understands the system architecture — this is natural. But for a data engineer who wants to "get in, configure quickly, and forget" — it\'s not.',
+    'solutions.insight.p2': 'Research confirmed: the respondent couldn\'t interpret the "Global configuration" and "Database connection credentials" checkboxes until they understood the encryption methods. Understanding "what to encrypt" was impossible without understanding "how to encrypt."',
+    'solutions.insight.p3': 'In the proposed solution, the order is changed to user-centric: first Encryption method (primary decision that determines available actions), then What to encrypt (secondary detail).',
+    'solutions.ba.label': 'Before / After',
+    'solutions.ba.before': 'Before — current DBeaver interface',
+    'solutions.ba.after': 'After — proposed redesign',
+    'solutions.changes.label': 'SOLUTIONS',
+    'solutions.changes.name': 'Key Changes',
+    'solutions.was': 'Before',
+    'solutions.became': 'After',
+    'solutions.table.label': 'SOLVED PROBLEMS SUMMARY',
+    'solutions.table.title': 'Solved UX Problems',
+    'solutions.table.problem': 'Problem',
+    'solutions.table.solution': 'Solution',
+    'solutions.table.evidence': 'Evidence',
+    'solutions.conclusion.title': 'Conclusion',
+    'solutions.conclusion.text': 'The proposed interface solves 10 problems on the main Security screen — 6 critical, 3 major, and 1 minor. Each solution is backed by data: user research, GitHub issues, official DBeaver and Eclipse documentation. Four solutions require developer confirmation and are marked accordingly.',
+    'solutions.conclusion.job1.title': '✓ Job 1 — configure quickly',
+    'solutions.conclusion.job1.desc': 'Security status → Master Password → Set password → Apply and close. Three meaningful steps instead of six points of confusion.',
+    'solutions.conclusion.job2.title': '✓ Job 2 — understand the value',
+    'solutions.conclusion.job2.desc': 'Security status immediately says "encrypted with default key — configure for stronger protection." Value on the first screen.',
+    'solutions.conclusion.figma': 'View full research in Figma ↗',
+    'flow.label': 'USER FLOW · SET PASSWORD',
+    'flow.title': 'New Set Password Flow',
+    'flow.desc': 'Comparison of the current wizard flow with 3 modal layers versus a new single-step dialog. Each screen is a real wireframe with rationale.',
+    'flow.conclusion.title': 'Conclusion',
+    'flow.conclusion.intro': 'Replacing the wizard with a simple password dialog follows Eclipse UI Guidelines:',
+    'flow.conclusion.quote': '"A wizard should be used if there are many steps in the task, and they must be completed in a specific order"',
+    'flow.conclusion.quoteSource': '— Eclipse UI Guidelines v2, Wizards section',
+    'flow.conclusion.text': 'Setting a master password is a single-step task (input + confirmation) that doesn\'t require a wizard pattern. The current implementation uses a wizard with two empty steps, violating Eclipse\'s own guidelines.',
+    'flow.sources.label': 'Sources',
+    'outcomes.label': 'EXPECTED OUTCOMES',
+    'outcomes.title': 'Expected Outcomes',
+    'outcomes.business': 'Business Outcome'
+  }
+};
+
+// ─── SECTIONS_I18N ───
+const SECTIONS_I18N = {
+  ru: [
+    {
+      id: 1, number: '01', label: '01. ЭКРАН', name: 'Security',
+      desc: 'Preferences → General → Security. Главный экран настройки безопасности в DBeaver Ultimate. Цветные точки на скриншоте — найденные проблемы с указанием уровня важности.',
+      image: 'dbeaver-ux-audit-assets/01-security.png',
+      caption: 'DBeaver Ultimate 26.1.0 — General → Security'
+    },
+    {
+      id: 2, number: '02', label: '02. ЭКРАН', name: 'See what secured data was saved',
+      desc: 'Что открывается при клике «See what secured data was saved» — Eclipse Secure Storage Viewer. Технический экран Eclipse, выведенный наружу без адаптации под пользователей DBeaver.',
+      image: 'dbeaver-ux-audit-assets/02-saved-data.png',
+      caption: 'Eclipse Secure Storage Viewer',
+      note: {
+        title: 'Конфликт с документацией',
+        text: 'Документация Eclipse: «Typically you will have no reason to alter the preferences on this page. The options here are mostly for troubleshooting.» Документация DBeaver называет это «Advanced mode» — но кнопка на основном экране без пометки.'
+      }
+    },
+    {
+      id: 3, number: '03', label: '03. ЭКРАН', name: 'Advanced',
+      desc: 'Экран продвинутых настроек Eclipse Secure Storage. Служебный интерфейс Eclipse Equinox для разработчиков плагинов — не для конечных пользователей DBeaver.',
+      image: 'dbeaver-ux-audit-assets/03-advanced.png',
+      caption: 'Eclipse Equinox · Secure Storage Advanced'
+    },
+    {
+      id: 4, number: '04', label: '04. ФЛОУ · CHANGE PASSWORD · STEP 1', name: 'Change Password · Step 1',
+      desc: 'Первый шаг wizard смены мастер-пароля. Старого пароля у пользователя нет, но wizard говорит «decrypting with old master password».',
+      image: 'dbeaver-ux-audit-assets/04-change-password-1.png',
+      caption: 'Change Master Password Wizard · Step 1 of 3'
+    },
+    {
+      id: 5, number: '05', label: '05. ФЛОУ · CHANGE PASSWORD · STEP 2', name: 'Change Password · Step 2',
+      desc: 'Второй шаг wizard. Пояснительный текст без действия — пользователь жмёт Next, не сделав ничего.',
+      image: 'dbeaver-ux-audit-assets/05-change-password-2.png',
+      caption: 'Change Master Password Wizard · Step 2 of 3'
+    },
+    {
+      id: 6, number: '06', label: '06. ФЛОУ · CHANGE PASSWORD · STEP 3', name: 'Change Password · Step 3',
+      desc: 'Третий шаг — ввод нового пароля. Появляется поверх предыдущих двух модальных окон без объяснения требований к паролю.',
+      image: 'dbeaver-ux-audit-assets/06-change-password-3.png',
+      caption: 'Change Master Password Wizard · Step 3 of 3'
+    }
+  ],
+  en: [
+    {
+      id: 1, number: '01', label: '01. SCREEN', name: 'Security',
+      desc: 'Preferences → General → Security. The main security settings screen in DBeaver Ultimate. Colored dots on the screenshot mark discovered issues with severity levels.',
+      image: 'dbeaver-ux-audit-assets/01-security.png',
+      caption: 'DBeaver Ultimate 26.1.0 — General → Security'
+    },
+    {
+      id: 2, number: '02', label: '02. SCREEN', name: 'See what secured data was saved',
+      desc: 'What opens when clicking "See what secured data was saved" — Eclipse Secure Storage Viewer. A technical Eclipse screen exposed without adaptation for DBeaver users.',
+      image: 'dbeaver-ux-audit-assets/02-saved-data.png',
+      caption: 'Eclipse Secure Storage Viewer',
+      note: {
+        title: 'Documentation conflict',
+        text: 'Eclipse docs: "Typically you will have no reason to alter the preferences on this page. The options here are mostly for troubleshooting." DBeaver documentation calls this "Advanced mode" — but the button on the main screen has no such label.'
+      }
+    },
+    {
+      id: 3, number: '03', label: '03. SCREEN', name: 'Advanced',
+      desc: 'Eclipse Secure Storage advanced settings screen. An internal Eclipse Equinox interface for plugin developers — not for DBeaver end users.',
+      image: 'dbeaver-ux-audit-assets/03-advanced.png',
+      caption: 'Eclipse Equinox · Secure Storage Advanced'
+    },
+    {
+      id: 4, number: '04', label: '04. FLOW · CHANGE PASSWORD · STEP 1', name: 'Change Password · Step 1',
+      desc: 'First step of the master password change wizard. The user has no old password, yet the wizard says "decrypting with old master password."',
+      image: 'dbeaver-ux-audit-assets/04-change-password-1.png',
+      caption: 'Change Master Password Wizard · Step 1 of 3'
+    },
+    {
+      id: 5, number: '05', label: '05. FLOW · CHANGE PASSWORD · STEP 2', name: 'Change Password · Step 2',
+      desc: 'Second wizard step. Explanatory text with no action — the user clicks Next without doing anything.',
+      image: 'dbeaver-ux-audit-assets/05-change-password-2.png',
+      caption: 'Change Master Password Wizard · Step 2 of 3'
+    },
+    {
+      id: 6, number: '06', label: '06. FLOW · CHANGE PASSWORD · STEP 3', name: 'Change Password · Step 3',
+      desc: 'Third step — entering the new password. Appears on top of two previous modal windows without explaining password requirements.',
+      image: 'dbeaver-ux-audit-assets/06-change-password-3.png',
+      caption: 'Change Master Password Wizard · Step 3 of 3'
+    }
+  ]
+};
+
+// ─── FINDINGS_I18N ───
+const FINDINGS_I18N = {
+  ru: [
+    { id: 1, section: 1, displayNum: '1', severity: 'critical', x: 42.6, y: 13.7,
+      title: 'Ложный чекбокс',
+      desc: 'Global config нельзя снять — выбрасывает ошибку. Потеря времени, подрыв доверия к интерфейсу. «Зачем делать её активной?» — интервью.',
+      tags: [{ label: 'Match Between System & Real World', url: 'https://www.nngroup.com/articles/match-system-real-world/' }] },
+    { id: 2, section: 1, displayNum: '2', severity: 'major', x: 50.4, y: 16.4,
+      title: 'Два равнозначных чекбокса',
+      desc: 'Отсутствие иерархии между Global Configuration и Database connection credentials. Пользователю непонятно чем два пункта отличаются.',
+      tags: [{ label: 'Match Between System & Real World', url: 'https://www.nngroup.com/articles/match-system-real-world/' }, { label: 'Law of Similarity', url: 'https://lawsofux.com/law-of-similarity/' }] },
+    { id: 3, section: 1, displayNum: '3', severity: 'critical', x: 37.8, y: 21.5,
+      title: 'Кнопка оторвана от контекста',
+      desc: 'Открывает диалог с содержимым Eclipse Secure Storage — технический экран Eclipse. Вводит в заблуждение. «Что это за пароли?» — интервью.',
+      tags: [{ label: 'Match Between System & Real World', url: 'https://www.nngroup.com/articles/match-system-real-world/' }, { label: 'Consistency', url: 'https://www.nngroup.com/articles/consistency-and-standards/' }] },
+    { id: 4, section: 1, displayNum: '4', severity: 'critical', x: 56.2, y: 28.3,
+      title: 'Критическая информация скрыта',
+      desc: '«Нельзя перенести на другую ОС» — мелкий шрифт, низкое discoverability и accessibility. Возможная потеря конфига при смене машины.',
+      tags: [{ label: 'Visibility of System Status', url: 'https://www.nngroup.com/articles/visibility-system-status/' }, { label: 'Preventing User Errors', url: 'https://www.nngroup.com/articles/slips/' }, { label: 'Visual Hierarchy', url: 'https://www.nngroup.com/articles/visual-hierarchy-ux-definition/' }] },
+    { id: 5, section: 1, displayNum: '5', severity: 'minor', x: 41.2, y: 47.8,
+      title: '3 метода Encryption без иерархии',
+      desc: 'Непонятно какой метод предпочтителен и есть ли иерархия между методами.',
+      tags: [{ label: 'Memory Recognition', url: 'https://www.nngroup.com/articles/recognition-and-recall/' }] },
+    { id: 6, section: 1, displayNum: '6', severity: 'major', x: 41.2, y: 54,
+      title: '«Not secure» Automation',
+      desc: 'Метка «Not secure» только в описании — пользователь не замечает разницы и пропускает информацию. На интервью дата-инженер не смог объяснить зачем нужен метод если он not secure.',
+      tags: [{ label: 'Visibility of System Status', url: 'https://www.nngroup.com/articles/visibility-system-status/' }, { label: 'Help and Documentation', url: 'https://www.nngroup.com/articles/help-and-documentation/' }] },
+    { id: 7, section: 1, displayNum: '7', severity: 'major', x: 29.4, y: 62,
+      title: 'Не корректный UX writing',
+      desc: 'Кнопка одинакова что с паролем, что без него. «Странно, что задать пароль нет опции — можно только сменить» — интервью.',
+      tags: [{ label: 'Visibility of System Status', url: 'https://www.nngroup.com/articles/visibility-system-status/' }, { label: 'Help and Documentation', url: 'https://www.nngroup.com/articles/help-and-documentation/' }] },
+    { id: 8, section: 1, displayNum: '8', severity: 'critical', x: 62.9, y: 62,
+      title: 'Double Confirm, нет ясного результата',
+      desc: 'Флоу из двух Delete-диалогов создаёт неопределённость и оставляет пользователя в неизвестном состоянии при отказе от перезапуска: удалился ли пароль?',
+      tags: [{ label: 'Visibility of System Status', url: 'https://www.nngroup.com/articles/visibility-system-status/' }, { label: 'Preventing User Errors', url: 'https://www.nngroup.com/articles/slips/' }] },
+    { id: 9, section: 1, displayNum: '9', severity: 'major', x: 90.8, y: 90.1,
+      title: 'Apply + Apply and Close',
+      desc: 'Дублирование. Неясная разница между двумя кнопками подтверждения.',
+      tags: [{ label: 'Aesthetic and Minimalist Design', url: 'https://www.nngroup.com/articles/aesthetic-minimalist-design/' }] },
+    { id: 10, section: 1, displayNum: '10', severity: 'major', x: 73.1, y: 90.1,
+      title: 'Restore Default — не ясен результат',
+      desc: 'Пользователь не видит результата действия кнопки. Найден тикет #19928 — задача на унификацию поведения Restore Defaults по всем разделам Preferences.',
+      tags: [{ label: 'Visibility of System Status', url: 'https://www.nngroup.com/articles/visibility-system-status/' }, { label: 'Consistency', url: 'https://www.nngroup.com/articles/consistency-and-standards/' }] },
+    { id: 11, section: 1, displayNum: '11', severity: 'minor', x: 90, y: 7.8,
+      title: 'Дополнительная навигация — неконсистентность с macOS / Windows',
+      desc: 'Стандартный элемент Eclipse PreferenceDialog для навигации по истории. На одностраничном Security-экране не несёт функции — визуальный шум.',
+      tags: [{ label: 'Aesthetic and Minimalist Design', url: 'https://www.nngroup.com/articles/aesthetic-minimalist-design/' }] },
+    { id: 12, section: 1, displayNum: '12', severity: 'minor', x: 95, y: 7.8,
+      title: 'Видимость доп. меню',
+      desc: 'Resize tree и Key Scrolling спрятаны от пользователей.',
+      tags: [{ label: 'Memory Recognition', url: 'https://www.nngroup.com/articles/recognition-and-recall/' }] },
+    { id: 13, section: 1, displayNum: '13', severity: 'minor', x: 8.0, y: 96.3,
+      title: 'Длительность времени на поиск Security',
+      desc: 'Пользователь с исследования смог найти Security только через поиск. Вынести в отдельное меню? Конфликт решения с Eclipse IDE.',
+      tags: [{ label: "Jakob's Law", url: 'https://lawsofux.com/jakobs-law/' }] },
+    { id: 14, section: 2, displayNum: '1', severity: 'critical', x: 38, y: 18,
+      title: 'Конфликт ожидание / реальность',
+      desc: 'DBeaver в документации пишет что это «Advanced mode» — но кнопка на основном экране без пометки и не совпадает по названию.',
+      tags: [] },
+    { id: 15, section: 2, displayNum: '2', severity: 'critical', x: 70, y: 32,
+      title: 'Advanced mode — конфликт документации',
+      desc: 'В технической документации название Advanced mode. Конфликт между документацией и UI. Гипотеза: для продвинутого пользователя DBeaver он, возможно, бесполезен — нельзя прочитать значения, нельзя понять что за узлы в дереве, нельзя выборочно пересохранить конкретное подключение. «Почему я не могу кликнуть и посмотреть пароль?» — интервью.',
+      tags: [] },
+    { id: 16, section: 2, displayNum: '2', severity: 'major', x: 8, y: 28,
+      title: 'Узлы дерева непонятны пользователям',
+      desc: 'Внутренние идентификаторы Eclipse-платформы (org.eclipse.core.net, org.eclipse.equinox.sec) — технические названия, не предназначенные для конечного пользователя.',
+      tags: [] },
+    { id: 17, section: 2, displayNum: '3', severity: 'major', x: 62, y: 90,
+      title: 'Restore Default — не ясен результат',
+      desc: 'Пользователь не видит результата действия кнопки Restore Default.',
+      tags: [] },
+    { id: 18, section: 2, displayNum: '4', severity: 'critical', x: 90, y: 74,
+      title: 'Delete — критический конфликт, угроза удаления данных',
+      desc: 'Delete здесь удаляет мастер-пароль в обход основного флоу. После рестарта пароль пропадает. Найдено два деструктивных пути к одному результату — с разным уровнем контекста и защиты. Кнопка Delete на основном экране воспринимается как один из первых элементов интерфейса, но удаляет всё содержимое secure storage.',
+      tags: [] },
+    { id: 19, section: 3, displayNum: '1', severity: 'critical', x: 79, y: 20,
+      title: 'Eclipse экран не для пользователей',
+      desc: 'Служебный Eclipse Equinox для разработчиков плагинов. Обычный пользователь не может осмысленно выбрать алгоритм шифрования. «Зачем столько алгоритмов?» — интервью',
+      tags: [] },
+    { id: 20, section: 3, displayNum: '2', severity: 'major', x: 66, y: 83,
+      title: '4 кнопки для одного дропдауна',
+      desc: 'Restore Defaults, Apply, Cancel, OK — избыточно для управления единственным дропдауном.',
+      tags: [] },
+    { id: 21, section: 4, displayNum: '1', severity: 'critical', x: 42, y: 27,
+      title: '«Old Password» без контекста — конфликт',
+      desc: 'По умолчанию мастер-пароль не задан пользователем — данные шифруются встроенным DES-ключом. Wizard говорит «decrypting with old master password», хотя пользователь никакого пароля не задавал и не понимает контекст. Влияние: замешательство на первом же шаге, потеря доверия к Security в DBeaver.',
+      tags: [] },
+    { id: 22, section: 4, displayNum: '2', severity: 'major', x: 47, y: 58,
+      title: 'Шаг без действия',
+      desc: 'Паттерн wizard предполагает осмысленное действие на каждом шаге. Step 1 и Step 2 содержат только пояснительный текст — пользователь дважды нажимает Next, ничего не сделав. Wizard стал обёрткой без функции.',
+      tags: [] },
+    { id: 23, section: 5, displayNum: '3', severity: 'major', x: 48, y: 58,
+      title: 'Шаг без действия',
+      desc: 'Та же проблема, что и на Step 1: только пояснительный текст, никакого ввода или решения. Wizard превращается в обёртку.',
+      tags: [] },
+    { id: 24, section: 6, displayNum: '4', severity: 'critical', x: 38, y: 37,
+      title: 'Нет индикатора сложности пароля',
+      desc: 'Password + Confirm Password без password strength indicator. Администратор может задать политику (минимальная длина, символы, mixed case), но пользователь требований не видит — узнаёт их через ошибку валидации.',
+      tags: [] },
+    { id: 25, section: 6, displayNum: '5', severity: 'major', x: 75, y: 17,
+      title: 'Три слоя модальных окон',
+      desc: 'Preferences → Wizard (Step 2 виден за диалогом) → Set password dialog. Пользователь видит три слоя одновременно, каждый со своим набором кнопок. Потеря контекста. NN/g: «Stacking modals compounds the interruption.»',
+      tags: [] },
+    { id: 26, section: 6, displayNum: '6', severity: 'major', x: 27, y: 44,
+      title: 'Объяснение ценности — на 3-м уровне (нарушена иерархия)',
+      desc: '«Set master password to save secure information» — единственное место во всём интерфейсе, где объясняется зачем нужен мастер-пароль. Лежит внутри модального окна внутри wizard внутри Preferences. Влияние: пользователь не понимает ценность фичи до момента, когда уже решил ей воспользоваться.',
+      tags: [] }
+  ],
+  en: [
+    { id: 1, section: 1, displayNum: '1', severity: 'critical', x: 42.6, y: 13.7,
+      title: 'False checkbox',
+      desc: 'Global config cannot be unchecked — throws an error. Wastes time, undermines trust in the interface. "Why make it interactive?" — interview.',
+      tags: [{ label: 'Match Between System & Real World', url: 'https://www.nngroup.com/articles/match-system-real-world/' }] },
+    { id: 2, section: 1, displayNum: '2', severity: 'major', x: 50.4, y: 16.4,
+      title: 'Two equal-weight checkboxes',
+      desc: 'No hierarchy between Global Configuration and Database connection credentials. The user can\'t tell how the two items differ.',
+      tags: [{ label: 'Match Between System & Real World', url: 'https://www.nngroup.com/articles/match-system-real-world/' }, { label: 'Law of Similarity', url: 'https://lawsofux.com/law-of-similarity/' }] },
+    { id: 3, section: 1, displayNum: '3', severity: 'critical', x: 37.8, y: 21.5,
+      title: 'Button detached from context',
+      desc: 'Opens a dialog with Eclipse Secure Storage content — a technical Eclipse screen. Misleading. "What are these passwords?" — interview.',
+      tags: [{ label: 'Match Between System & Real World', url: 'https://www.nngroup.com/articles/match-system-real-world/' }, { label: 'Consistency', url: 'https://www.nngroup.com/articles/consistency-and-standards/' }] },
+    { id: 4, section: 1, displayNum: '4', severity: 'critical', x: 56.2, y: 28.3,
+      title: 'Critical information hidden',
+      desc: '"Cannot be transferred to another OS" — small font, low discoverability and accessibility. Potential config loss when switching machines.',
+      tags: [{ label: 'Visibility of System Status', url: 'https://www.nngroup.com/articles/visibility-system-status/' }, { label: 'Preventing User Errors', url: 'https://www.nngroup.com/articles/slips/' }, { label: 'Visual Hierarchy', url: 'https://www.nngroup.com/articles/visual-hierarchy-ux-definition/' }] },
+    { id: 5, section: 1, displayNum: '5', severity: 'minor', x: 41.2, y: 47.8,
+      title: '3 Encryption methods without hierarchy',
+      desc: 'Unclear which method is preferred and whether there\'s a hierarchy between methods.',
+      tags: [{ label: 'Memory Recognition', url: 'https://www.nngroup.com/articles/recognition-and-recall/' }] },
+    { id: 6, section: 1, displayNum: '6', severity: 'major', x: 41.2, y: 54,
+      title: '"Not secure" Automation',
+      desc: 'The "Not secure" label is only in the description — users miss the difference. In the interview, a data engineer couldn\'t explain why a method exists if it\'s not secure.',
+      tags: [{ label: 'Visibility of System Status', url: 'https://www.nngroup.com/articles/visibility-system-status/' }, { label: 'Help and Documentation', url: 'https://www.nngroup.com/articles/help-and-documentation/' }] },
+    { id: 7, section: 1, displayNum: '7', severity: 'major', x: 29.4, y: 62,
+      title: 'Incorrect UX writing',
+      desc: 'The button label is the same whether a password is set or not. "It\'s strange there\'s no option to set a password — you can only change it" — interview.',
+      tags: [{ label: 'Visibility of System Status', url: 'https://www.nngroup.com/articles/visibility-system-status/' }, { label: 'Help and Documentation', url: 'https://www.nngroup.com/articles/help-and-documentation/' }] },
+    { id: 8, section: 1, displayNum: '8', severity: 'critical', x: 62.9, y: 62,
+      title: 'Double Confirm, unclear outcome',
+      desc: 'A flow of two Delete dialogs creates uncertainty and leaves the user in an unknown state if they decline the restart: was the password deleted?',
+      tags: [{ label: 'Visibility of System Status', url: 'https://www.nngroup.com/articles/visibility-system-status/' }, { label: 'Preventing User Errors', url: 'https://www.nngroup.com/articles/slips/' }] },
+    { id: 9, section: 1, displayNum: '9', severity: 'major', x: 90.8, y: 90.1,
+      title: 'Apply + Apply and Close',
+      desc: 'Duplication. Unclear difference between two confirmation buttons.',
+      tags: [{ label: 'Aesthetic and Minimalist Design', url: 'https://www.nngroup.com/articles/aesthetic-minimalist-design/' }] },
+    { id: 10, section: 1, displayNum: '10', severity: 'major', x: 73.1, y: 90.1,
+      title: 'Restore Default — unclear outcome',
+      desc: 'The user can\'t see what the button does. Found ticket #19928 — a task to unify Restore Defaults behavior across all Preferences sections.',
+      tags: [{ label: 'Visibility of System Status', url: 'https://www.nngroup.com/articles/visibility-system-status/' }, { label: 'Consistency', url: 'https://www.nngroup.com/articles/consistency-and-standards/' }] },
+    { id: 11, section: 1, displayNum: '11', severity: 'minor', x: 90, y: 7.8,
+      title: 'Extra navigation — inconsistent with macOS / Windows',
+      desc: 'Standard Eclipse PreferenceDialog element for history navigation. On a single-page Security screen it serves no function — visual noise.',
+      tags: [{ label: 'Aesthetic and Minimalist Design', url: 'https://www.nngroup.com/articles/aesthetic-minimalist-design/' }] },
+    { id: 12, section: 1, displayNum: '12', severity: 'minor', x: 95, y: 7.8,
+      title: 'Hidden extra menu',
+      desc: 'Resize tree and Key Scrolling are hidden from users.',
+      tags: [{ label: 'Memory Recognition', url: 'https://www.nngroup.com/articles/recognition-and-recall/' }] },
+    { id: 13, section: 1, displayNum: '13', severity: 'minor', x: 8.0, y: 96.3,
+      title: 'Time to find Security settings',
+      desc: 'The research participant could only find Security through search. Move to a separate menu? Conflicts with Eclipse IDE conventions.',
+      tags: [{ label: "Jakob's Law", url: 'https://lawsofux.com/jakobs-law/' }] },
+    { id: 14, section: 2, displayNum: '1', severity: 'critical', x: 38, y: 18,
+      title: 'Expectation vs. reality conflict',
+      desc: 'DBeaver docs call this "Advanced mode" — but the button on the main screen has no such label and the name doesn\'t match.',
+      tags: [] },
+    { id: 15, section: 2, displayNum: '2', severity: 'critical', x: 70, y: 32,
+      title: 'Advanced mode — documentation conflict',
+      desc: 'Technical docs use the name "Advanced mode." Conflict between documentation and UI. Hypothesis: for an advanced DBeaver user it may be useless — can\'t read values, can\'t understand tree nodes, can\'t selectively re-save a specific connection. "Why can\'t I click and see the password?" — interview.',
+      tags: [] },
+    { id: 16, section: 2, displayNum: '2', severity: 'major', x: 8, y: 28,
+      title: 'Tree nodes incomprehensible to users',
+      desc: 'Internal Eclipse platform identifiers (org.eclipse.core.net, org.eclipse.equinox.sec) — technical names not intended for end users.',
+      tags: [] },
+    { id: 17, section: 2, displayNum: '3', severity: 'major', x: 62, y: 90,
+      title: 'Restore Default — unclear outcome',
+      desc: 'The user can\'t see what the Restore Default button does.',
+      tags: [] },
+    { id: 18, section: 2, displayNum: '4', severity: 'critical', x: 90, y: 74,
+      title: 'Delete — critical conflict, data deletion threat',
+      desc: 'Delete here removes the master password bypassing the main flow. After restart the password is gone. Two destructive paths to the same result found — with different levels of context and protection. The Delete button on the main screen appears as one of the first interface elements but deletes all secure storage contents.',
+      tags: [] },
+    { id: 19, section: 3, displayNum: '1', severity: 'critical', x: 79, y: 20,
+      title: 'Eclipse screen not for users',
+      desc: 'Internal Eclipse Equinox for plugin developers. A regular user cannot meaningfully choose an encryption algorithm. "Why so many algorithms?" — interview.',
+      tags: [] },
+    { id: 20, section: 3, displayNum: '2', severity: 'major', x: 66, y: 83,
+      title: '4 buttons for one dropdown',
+      desc: 'Restore Defaults, Apply, Cancel, OK — excessive for managing a single dropdown.',
+      tags: [] },
+    { id: 21, section: 4, displayNum: '1', severity: 'critical', x: 42, y: 27,
+      title: '"Old Password" without context — conflict',
+      desc: 'By default, no master password is set by the user — data is encrypted with a built-in DES key. The wizard says "decrypting with old master password" although the user never set any password and doesn\'t understand the context. Impact: confusion at the very first step, loss of trust in DBeaver Security.',
+      tags: [] },
+    { id: 22, section: 4, displayNum: '2', severity: 'major', x: 47, y: 58,
+      title: 'Step without action',
+      desc: 'The wizard pattern implies a meaningful action at each step. Steps 1 and 2 contain only explanatory text — the user clicks Next twice without doing anything. The wizard has become a functionless wrapper.',
+      tags: [] },
+    { id: 23, section: 5, displayNum: '3', severity: 'major', x: 48, y: 58,
+      title: 'Step without action',
+      desc: 'Same problem as Step 1: only explanatory text, no input or decision. The wizard becomes a wrapper.',
+      tags: [] },
+    { id: 24, section: 6, displayNum: '4', severity: 'critical', x: 38, y: 37,
+      title: 'No password strength indicator',
+      desc: 'Password + Confirm Password without a password strength indicator. Admin can set a policy (min length, symbols, mixed case), but the user doesn\'t see the requirements — learns them through validation errors.',
+      tags: [] },
+    { id: 25, section: 6, displayNum: '5', severity: 'major', x: 75, y: 17,
+      title: 'Three layers of modal windows',
+      desc: 'Preferences → Wizard (Step 2 visible behind the dialog) → Set password dialog. The user sees three layers simultaneously, each with its own set of buttons. Loss of context. NN/g: "Stacking modals compounds the interruption."',
+      tags: [] },
+    { id: 26, section: 6, displayNum: '6', severity: 'major', x: 27, y: 44,
+      title: 'Value explanation — buried at 3rd level (broken hierarchy)',
+      desc: '"Set master password to save secure information" — the only place in the entire interface that explains why a master password is needed. Nested inside a modal inside a wizard inside Preferences. Impact: the user doesn\'t understand the feature\'s value until they\'ve already decided to use it.',
+      tags: [] }
+  ]
+};
+
+// ─── SOLUTIONS_I18N ───
+const SOLUTIONS_I18N = {
+  ru: [
+    { id: 's1', num: '1', severity: 'critical', x: 82, y: 10,
+      title: 'Security status с бейджем «Not configured»',
+      before: 'Radio-кнопка выбрана по умолчанию — ложное ощущение что пароль активен',
+      after: 'Первый элемент экрана — явный статус Active / Not configured',
+      tags: [{ label: 'wiki/Project-security', url: 'https://github.com/dbeaver/dbeaver/wiki/Project-security' }, { label: 'Тикет #37306', url: 'https://github.com/dbeaver/dbeaver/issues/37306' }, { label: 'NN/Group #1 Visibility of system status' }] },
+    { id: 's2', num: '2', severity: 'critical', x: 55, y: 20,
+      title: 'Warning-баннер с ⚠ иконкой',
+      before: '«Нельзя перенести на другую ОС» — мелкий серый шрифт',
+      after: 'Визуальный баннер с иконкой ⚠ и болдом, выше карточек методов',
+      tags: [{ label: 'wiki/Managing-Master-Password', url: 'https://github.com/dbeaver/dbeaver/wiki/Managing-Master-Password' }, { label: 'NN/Group #1, #5' }, { label: 'requires dev' }] },
+    { id: 's3', num: '3', severity: 'major', x: 25, y: 17,
+      title: 'Encryption method — иерархия action-first',
+      before: 'Сначала «что шифровать», потом «как» — без контекста',
+      after: 'Сначала выбор метода, потом скоуп. Action-first иерархия',
+      tags: [{ label: 'Information Architecture' }] },
+    { id: 's4', num: '4', severity: 'major', x: 55, y: 30,
+      title: 'Master Password — карточка с Set/Recover',
+      before: '3 кнопки в ряд, Recover disabled без tooltip',
+      after: 'Set + Recover внутри карточки метода, пояснение под кнопкой',
+      tags: [{ label: 'Тикет #23084', url: 'https://github.com/dbeaver/dbeaver/issues/23084' }, { label: 'dbeaver.com/Managing-Master-Password', url: 'https://dbeaver.com/docs/dbeaver/Managing-Master-Password/' }, { label: 'NN/Group #1, #10' }] },
+    { id: 's5', num: '5', severity: 'critical', x: 78, y: 45,
+      title: 'Automation отделена с бейджем «Headless»',
+      before: 'Визуально идентична безопасным методам, «Not secure» в тексте',
+      after: 'Визуально отделена, бейдж Headless, болд на «server environments only»',
+      tags: [{ label: 'dbeaver.com/Automation-Security', url: 'https://dbeaver.com/docs/dbeaver/Admin-Manage-Connections/#automation-security' }, { label: 'NN/Group #5 Error prevention' }] },
+    { id: 's6', num: '6', severity: 'critical', x: 35, y: 57,
+      title: 'Global config — статичный элемент',
+      before: 'Интерактивный чекбокс, при снятии — диалог ошибки',
+      after: 'Disabled чекбокс с текстом «always encrypted» и ссылкой More info',
+      tags: [{ label: 'Интервью: «Зачем делать её активной?»' }, { label: 'NN/Group #2, #5' }, { label: 'Закон Гештальта' }] },
+    { id: 's7', num: '7', severity: 'critical', x: 35, y: 87,
+      title: 'Убрана кнопка «See what secured data»',
+      before: 'Кнопка без пометки Advanced открывала Eclipse Viewer с Delete',
+      after: 'Текстовая ссылка «Advanced storage settings...» внизу экрана',
+      tags: [{ label: 'Eclipse docs: «mostly for troubleshooting»' }, { label: 'dbeaver.com/Security', url: 'https://dbeaver.com/docs/dbeaver/Security/' }, { label: 'NN/Group #2, #5' }] },
+    { id: 's8', num: '8', severity: 'critical', x: 40, y: 77,
+      title: 'Delete secure storage — изолированная секция',
+      before: 'Delete в одном ряду с Change и Recover, одинакового веса',
+      after: 'Отдельная секция с заголовком, описанием последствий и предупреждением',
+      tags: [{ label: 'Тикет #23084', url: 'https://github.com/dbeaver/dbeaver/issues/23084' }, { label: 'Тикет #7211', url: 'https://github.com/dbeaver/dbeaver/issues/7211' }, { label: 'NN/Group #5 Error prevention' }] },
+    { id: 's9', num: '9', severity: 'major', x: 30, y: 70,
+      title: 'Apply с пояснением',
+      before: '4 кнопки: Restore Defaults (не работает) + Apply + Cancel + Apply and Close',
+      after: 'Apply внутри контента с пояснением. Restore Defaults убрана. ⚠ Требует согласования с разработкой — потенциальный конфликт с общей системой Preferences Eclipse',
+      tags: [{ label: 'Тикет #19928', url: 'https://github.com/dbeaver/dbeaver/issues/19928' }, { label: 'Тикет #12605', url: 'https://github.com/dbeaver/dbeaver/issues/12605' }, { label: 'NN/Group #1' }, { label: 'requires dev' }] },
+    { id: 's10', num: '10', severity: 'minor', x: 93, y: 7,
+      title: 'Навигация — стрелки убраны',
+      before: 'Стрелки ← → + скрытое меню с нулевой обнаруживаемостью',
+      after: 'Стрелки убраны. Меню ⋮ осталось видимым',
+      tags: [{ label: 'NN/Group #8 Aesthetic minimalism' }, { label: '#6 Recognition > recall' }, { label: 'requires dev' }] }
+  ],
+  en: [
+    { id: 's1', num: '1', severity: 'critical', x: 82, y: 10,
+      title: 'Security status with "Not configured" badge',
+      before: 'Radio button selected by default — false sense that the password is active',
+      after: 'First screen element — explicit Active / Not configured status',
+      tags: [{ label: 'wiki/Project-security', url: 'https://github.com/dbeaver/dbeaver/wiki/Project-security' }, { label: 'Issue #37306', url: 'https://github.com/dbeaver/dbeaver/issues/37306' }, { label: 'NN/Group #1 Visibility of system status' }] },
+    { id: 's2', num: '2', severity: 'critical', x: 55, y: 20,
+      title: 'Warning banner with ⚠ icon',
+      before: '"Cannot be transferred to another OS" — small gray font',
+      after: 'Visual banner with ⚠ icon and bold text, above method cards',
+      tags: [{ label: 'wiki/Managing-Master-Password', url: 'https://github.com/dbeaver/dbeaver/wiki/Managing-Master-Password' }, { label: 'NN/Group #1, #5' }, { label: 'requires dev' }] },
+    { id: 's3', num: '3', severity: 'major', x: 25, y: 17,
+      title: 'Encryption method — action-first hierarchy',
+      before: 'First "what to encrypt," then "how" — without context',
+      after: 'Method selection first, then scope. Action-first hierarchy',
+      tags: [{ label: 'Information Architecture' }] },
+    { id: 's4', num: '4', severity: 'major', x: 55, y: 30,
+      title: 'Master Password — card with Set/Recover',
+      before: '3 buttons in a row, Recover disabled without tooltip',
+      after: 'Set + Recover inside the method card, explanation below the button',
+      tags: [{ label: 'Issue #23084', url: 'https://github.com/dbeaver/dbeaver/issues/23084' }, { label: 'dbeaver.com/Managing-Master-Password', url: 'https://dbeaver.com/docs/dbeaver/Managing-Master-Password/' }, { label: 'NN/Group #1, #10' }] },
+    { id: 's5', num: '5', severity: 'critical', x: 78, y: 45,
+      title: 'Automation separated with "Headless" badge',
+      before: 'Visually identical to secure methods, "Not secure" only in text',
+      after: 'Visually separated, Headless badge, bold on "server environments only"',
+      tags: [{ label: 'dbeaver.com/Automation-Security', url: 'https://dbeaver.com/docs/dbeaver/Admin-Manage-Connections/#automation-security' }, { label: 'NN/Group #5 Error prevention' }] },
+    { id: 's6', num: '6', severity: 'critical', x: 35, y: 57,
+      title: 'Global config — static element',
+      before: 'Interactive checkbox, unchecking triggers an error dialog',
+      after: 'Disabled checkbox with "always encrypted" text and More info link',
+      tags: [{ label: 'Interview: "Why make it interactive?"' }, { label: 'NN/Group #2, #5' }, { label: 'Gestalt Law' }] },
+    { id: 's7', num: '7', severity: 'critical', x: 35, y: 87,
+      title: 'Removed "See what secured data" button',
+      before: 'Button without Advanced label opened Eclipse Viewer with Delete',
+      after: 'Text link "Advanced storage settings..." at the bottom of the screen',
+      tags: [{ label: 'Eclipse docs: "mostly for troubleshooting"' }, { label: 'dbeaver.com/Security', url: 'https://dbeaver.com/docs/dbeaver/Security/' }, { label: 'NN/Group #2, #5' }] },
+    { id: 's8', num: '8', severity: 'critical', x: 40, y: 77,
+      title: 'Delete secure storage — isolated section',
+      before: 'Delete in the same row as Change and Recover, equal weight',
+      after: 'Separate section with heading, consequence description, and warning',
+      tags: [{ label: 'Issue #23084', url: 'https://github.com/dbeaver/dbeaver/issues/23084' }, { label: 'Issue #7211', url: 'https://github.com/dbeaver/dbeaver/issues/7211' }, { label: 'NN/Group #5 Error prevention' }] },
+    { id: 's9', num: '9', severity: 'major', x: 30, y: 70,
+      title: 'Apply with explanation',
+      before: '4 buttons: Restore Defaults (broken) + Apply + Cancel + Apply and Close',
+      after: 'Apply within content with explanation. Restore Defaults removed. ⚠ Requires dev coordination — potential conflict with Eclipse Preferences system',
+      tags: [{ label: 'Issue #19928', url: 'https://github.com/dbeaver/dbeaver/issues/19928' }, { label: 'Issue #12605', url: 'https://github.com/dbeaver/dbeaver/issues/12605' }, { label: 'NN/Group #1' }, { label: 'requires dev' }] },
+    { id: 's10', num: '10', severity: 'minor', x: 93, y: 7,
+      title: 'Navigation — arrows removed',
+      before: '← → arrows + hidden menu with zero discoverability',
+      after: 'Arrows removed. ⋮ menu remains visible',
+      tags: [{ label: 'NN/Group #8 Aesthetic minimalism' }, { label: '#6 Recognition > recall' }, { label: 'requires dev' }] }
+  ]
+};
+
+// ─── FLOW_SCREENS_I18N ───
+const FLOW_SCREENS_I18N = {
+  ru: {
+    1: { src: 'dbeaver-ux-audit-assets/flow-screen-1.png', alt: 'Security status', caption: 'Экран 1 из 3 — Security status' },
+    2: { src: 'dbeaver-ux-audit-assets/flow-screen-2.png', alt: 'Set password', caption: 'Экран 2 из 3 — Set password' },
+    3: { src: 'dbeaver-ux-audit-assets/flow-screen-3.png', alt: 'Подтверждение', caption: 'Экран 3 из 3 — Подтверждение' }
+  },
+  en: {
+    1: { src: 'dbeaver-ux-audit-assets/flow-screen-1.png', alt: 'Security status', caption: 'Screen 1 of 3 — Security status' },
+    2: { src: 'dbeaver-ux-audit-assets/flow-screen-2.png', alt: 'Set password', caption: 'Screen 2 of 3 — Set password' },
+    3: { src: 'dbeaver-ux-audit-assets/flow-screen-3.png', alt: 'Confirmation', caption: 'Screen 3 of 3 — Confirmation' }
+  }
+};
+
+// ─── FLOW_STEPS_I18N ───
+const FLOW_STEPS_I18N = {
+  ru: [
+    { num: 1, title: 'Security status', desc: 'Новый Security-экран. Пользователь видит Security status: Not configured. Понимает что нужно настроить. Нажимает Set password внутри карточки Master Password. Один клик — понятное действие.' },
+    { num: 2, title: 'Set password', desc: 'Диалог Set DBeaver Ultimate master password. Один диалог, не три слоя. Внутри всё что нужно: поля Password и Confirm Password, видимые требования к паролю, поле Password hint. Пользователь делает всё в одном месте.' },
+    { num: 3, title: 'Подтверждение', desc: 'Возврат на Security-экран. Статус обновился. Кнопка Set password сменилась на Change password и Recover password. Пользователь видит что действие выполнено.' }
+  ],
+  en: [
+    { num: 1, title: 'Security status', desc: 'New Security screen. The user sees Security status: Not configured. Understands they need to set it up. Clicks Set password inside the Master Password card. One click — clear action.' },
+    { num: 2, title: 'Set password', desc: 'Set DBeaver Ultimate master password dialog. One dialog, not three layers. Everything needed inside: Password and Confirm Password fields, visible password requirements, Password hint field. The user does everything in one place.' },
+    { num: 3, title: 'Confirmation', desc: 'Return to the Security screen. Status updated. Set password button changed to Change password and Recover password. The user sees the action was completed.' }
+  ]
+};
+
+// ─── SOLVED_PROBLEMS_I18N ───
+const SOLVED_PROBLEMS_I18N = {
+  ru: {
+    critical: {
+      label: '6 критичных решено',
+      items: [
+        { problem: 'Нет статуса системы — Radio выбрана, но пароль не задан. Данные на DES-ключе из исходного кода.', solution: 'Security status с бейджем Not configured / Active — первый элемент экрана', evidence: 'wiki/Project-security, тикет #37306, интервью' },
+        { problem: 'Предупреждение скрыто в тексте — «Нельзя перенести на другую ОС» — мелкий серый шрифт', solution: 'Warning-баннер с иконкой, болд на ключевых словах, выше карточек методов', evidence: 'wiki/Managing-Master-Password · requires dev' },
+        { problem: 'Eclipse-экран как основной элемент — Кнопка без пометки Advanced открывает технический Viewer', solution: 'Заменена на ссылку «Advanced storage settings...» внизу экрана', evidence: 'Eclipse: «mostly for troubleshooting», DBeaver: «Advanced mode»' },
+        { problem: 'Automation без визуального барьера — «Not secure» только в описании', solution: 'Отделена визуально, бейдж Headless, болд на «server environments only»', evidence: 'dbeaver.com/Automation-Security, интервью' },
+        { problem: 'Delete рядом с Change — Три кнопки в ряд, одинаковый вес', solution: 'Изолированная секция Delete secure storage с описанием и предупреждением', evidence: 'Тикеты #23084, #7211' },
+        { problem: 'Ложный чекбокс — Global configuration нельзя снять → диалог ошибки', solution: 'Disabled чекбокс с текстом «always encrypted» и ссылкой More info', evidence: 'Интервью: «Зачем делать её активной?»' }
+      ]
+    },
+    major: {
+      label: '3 значимых решено',
+      items: [
+        { problem: 'Чекбоксы без разницы — Global config и DB credentials — нет иерархии', solution: 'Global config = статичный текст. DB credentials = чекбокс с описанием', evidence: 'Интервью, закон Гештальта' },
+        { problem: 'Три метода без иерархии — Одинаковый визуальный вес', solution: 'Карточки с бейджами Recommended / Headless. Порядок action-first', evidence: 'Интервью: «Всё в одну кучу»' },
+        { problem: 'Recover disabled без объяснений — Нет tooltip, пользователь не знает условий', solution: 'Пояснение: «Recovery available if questions were set during creation»', evidence: 'Тикет #23084' }
+      ]
+    },
+    minor: {
+      label: '1 минорная решена',
+      items: [
+        { problem: 'Стрелки навигации — Легаси Eclipse, не нужны на Security-экране', solution: 'Убраны', evidence: 'requires dev' }
+      ]
     }
   },
-  {
-    id: 3,
-    number: '03',
-    label: '03. ЭКРАН',
-    name: 'Advanced',
-    desc: 'Экран продвинутых настроек Eclipse Secure Storage. Служебный интерфейс Eclipse Equinox для разработчиков плагинов — не для конечных пользователей DBeaver.',
-    image: 'dbeaver-ux-audit-assets/03-advanced.png',
-    caption: 'Eclipse Equinox · Secure Storage Advanced'
-  },
-  {
-    id: 4,
-    number: '04',
-    label: '04. ФЛОУ · CHANGE PASSWORD · STEP 1',
-    name: 'Change Password · Step 1',
-    desc: 'Первый шаг wizard смены мастер-пароля. Старого пароля у пользователя нет, но wizard говорит «decrypting with old master password».',
-    image: 'dbeaver-ux-audit-assets/04-change-password-1.png',
-    caption: 'Change Master Password Wizard · Step 1 of 3'
-  },
-  {
-    id: 5,
-    number: '05',
-    label: '05. ФЛОУ · CHANGE PASSWORD · STEP 2',
-    name: 'Change Password · Step 2',
-    desc: 'Второй шаг wizard. Пояснительный текст без действия — пользователь жмёт Next, не сделав ничего.',
-    image: 'dbeaver-ux-audit-assets/05-change-password-2.png',
-    caption: 'Change Master Password Wizard · Step 2 of 3'
-  },
-  {
-    id: 6,
-    number: '06',
-    label: '06. ФЛОУ · CHANGE PASSWORD · STEP 3',
-    name: 'Change Password · Step 3',
-    desc: 'Третий шаг — ввод нового пароля. Появляется поверх предыдущих двух модальных окон без объяснения требований к паролю.',
-    image: 'dbeaver-ux-audit-assets/06-change-password-3.png',
-    caption: 'Change Master Password Wizard · Step 3 of 3'
+  en: {
+    critical: {
+      label: '6 critical solved',
+      items: [
+        { problem: 'No system status — Radio selected but no password set. Data encrypted with DES key from source code.', solution: 'Security status with Not configured / Active badge — first screen element', evidence: 'wiki/Project-security, issue #37306, interview' },
+        { problem: 'Warning hidden in text — "Cannot be transferred to another OS" — small gray font', solution: 'Warning banner with icon, bold on key words, above method cards', evidence: 'wiki/Managing-Master-Password · requires dev' },
+        { problem: 'Eclipse screen as primary element — Button without Advanced label opens technical Viewer', solution: 'Replaced with "Advanced storage settings..." link at the bottom', evidence: 'Eclipse: "mostly for troubleshooting," DBeaver: "Advanced mode"' },
+        { problem: 'Automation without visual barrier — "Not secure" only in description', solution: 'Visually separated, Headless badge, bold on "server environments only"', evidence: 'dbeaver.com/Automation-Security, interview' },
+        { problem: 'Delete next to Change — Three buttons in a row, equal weight', solution: 'Isolated Delete secure storage section with description and warning', evidence: 'Issues #23084, #7211' },
+        { problem: 'False checkbox — Global configuration can\'t be unchecked → error dialog', solution: 'Disabled checkbox with "always encrypted" text and More info link', evidence: 'Interview: "Why make it interactive?"' }
+      ]
+    },
+    major: {
+      label: '3 major solved',
+      items: [
+        { problem: 'Checkboxes without difference — Global config and DB credentials — no hierarchy', solution: 'Global config = static text. DB credentials = checkbox with description', evidence: 'Interview, Gestalt Law' },
+        { problem: 'Three methods without hierarchy — Equal visual weight', solution: 'Cards with Recommended / Headless badges. Action-first order', evidence: 'Interview: "Everything lumped together"' },
+        { problem: 'Recover disabled without explanation — No tooltip, user doesn\'t know the conditions', solution: 'Explanation: "Recovery available if questions were set during creation"', evidence: 'Issue #23084' }
+      ]
+    },
+    minor: {
+      label: '1 minor solved',
+      items: [
+        { problem: 'Navigation arrows — Legacy Eclipse, not needed on Security screen', solution: 'Removed', evidence: 'requires dev' }
+      ]
+    }
   }
-];
+};
 
-const FINDINGS = [
-  // ─── Screen 1: Security ───
-  {
-    id: 1, section: 1, displayNum: '1', severity: 'critical',
-    x: 42.6, y: 13.7,
-    title: 'Ложный чекбокс',
-    desc: 'Global config нельзя снять — выбрасывает ошибку. Потеря времени, подрыв доверия к интерфейсу. «Зачем делать её активной?» — интервью.',
-    tags: [{ label: 'Match Between System & Real World', url: 'https://www.nngroup.com/articles/match-system-real-world/' }]
-  },
-  {
-    id: 2, section: 1, displayNum: '2', severity: 'major',
-    x: 50.4, y: 16.4,
-    title: 'Два равнозначных чекбокса',
-    desc: 'Отсутствие иерархии между Global Configuration и Database connection credentials. Пользователю непонятно чем два пункта отличаются.',
-    tags: [
-      { label: 'Match Between System & Real World', url: 'https://www.nngroup.com/articles/match-system-real-world/' },
-      { label: 'Law of Similarity', url: 'https://lawsofux.com/law-of-similarity/' }
-    ]
-  },
-  {
-    id: 3, section: 1, displayNum: '3', severity: 'critical',
-    x: 37.8, y: 21.5,
-    title: 'Кнопка оторвана от контекста',
-    desc: 'Открывает диалог с содержимым Eclipse Secure Storage — технический экран Eclipse. Вводит в заблуждение. «Что это за пароли?» — интервью.',
-    tags: [
-      { label: 'Match Between System & Real World', url: 'https://www.nngroup.com/articles/match-system-real-world/' },
-      { label: 'Consistency', url: 'https://www.nngroup.com/articles/consistency-and-standards/' }
-    ]
-  },
-  {
-    id: 4, section: 1, displayNum: '4', severity: 'critical',
-    x: 56.2, y: 28.3,
-    title: 'Критическая информация скрыта',
-    desc: '«Нельзя перенести на другую ОС» — мелкий шрифт, низкое discoverability и accessibility. Возможная потеря конфига при смене машины.',
-    tags: [
-      { label: 'Visibility of System Status', url: 'https://www.nngroup.com/articles/visibility-system-status/' },
-      { label: 'Preventing User Errors', url: 'https://www.nngroup.com/articles/slips/' },
-      { label: 'Visual Hierarchy', url: 'https://www.nngroup.com/articles/visual-hierarchy-ux-definition/' }
-    ]
-  },
-  {
-    id: 5, section: 1, displayNum: '5', severity: 'minor',
-    x: 41.2, y: 47.8,
-    title: '3 метода Encryption без иерархии',
-    desc: 'Непонятно какой метод предпочтителен и есть ли иерархия между методами.',
-    tags: [{ label: 'Memory Recognition', url: 'https://www.nngroup.com/articles/recognition-and-recall/' }]
-  },
-  {
-    id: 6, section: 1, displayNum: '6', severity: 'major',
-    x: 41.2, y: 54,
-    title: '«Not secure» Automation',
-    desc: 'Метка «Not secure» только в описании — пользователь не замечает разницы и пропускает информацию. На интервью дата-инженер не смог объяснить зачем нужен метод если он not secure.',
-    tags: [
-      { label: 'Visibility of System Status', url: 'https://www.nngroup.com/articles/visibility-system-status/' },
-      { label: 'Help and Documentation', url: 'https://www.nngroup.com/articles/help-and-documentation/' }
-    ]
-  },
-  {
-    id: 7, section: 1, displayNum: '7', severity: 'major',
-    x: 29.4, y: 62,
-    title: 'Не корректный UX writing',
-    desc: 'Кнопка одинакова что с паролем, что без него. «Странно, что задать пароль нет опции — можно только сменить» — интервью.',
-    tags: [
-      { label: 'Visibility of System Status', url: 'https://www.nngroup.com/articles/visibility-system-status/' },
-      { label: 'Help and Documentation', url: 'https://www.nngroup.com/articles/help-and-documentation/' }
-    ]
-  },
-  {
-    id: 8, section: 1, displayNum: '8', severity: 'critical',
-    x: 62.9, y: 62,
-    title: 'Double Confirm, нет ясного результата',
-    desc: 'Флоу из двух Delete-диалогов создаёт неопределённость и оставляет пользователя в неизвестном состоянии при отказе от перезапуска: удалился ли пароль?',
-    tags: [
-      { label: 'Visibility of System Status', url: 'https://www.nngroup.com/articles/visibility-system-status/' },
-      { label: 'Preventing User Errors', url: 'https://www.nngroup.com/articles/slips/' }
-    ]
-  },
-  {
-    id: 9, section: 1, displayNum: '9', severity: 'major',
-    x: 90.8, y: 90.1,
-    title: 'Apply + Apply and Close',
-    desc: 'Дублирование. Неясная разница между двумя кнопками подтверждения.',
-    tags: [{ label: 'Aesthetic and Minimalist Design', url: 'https://www.nngroup.com/articles/aesthetic-minimalist-design/' }]
-  },
-  {
-    id: 10, section: 1, displayNum: '10', severity: 'major',
-    x: 73.1, y: 90.1,
-    title: 'Restore Default — не ясен результат',
-    desc: 'Пользователь не видит результата действия кнопки. Найден тикет #19928 — задача на унификацию поведения Restore Defaults по всем разделам Preferences.',
-    tags: [
-      { label: 'Visibility of System Status', url: 'https://www.nngroup.com/articles/visibility-system-status/' },
-      { label: 'Consistency', url: 'https://www.nngroup.com/articles/consistency-and-standards/' }
-    ]
-  },
-  {
-    id: 11, section: 1, displayNum: '11', severity: 'minor',
-    x: 90, y: 7.8,
-    title: 'Дополнительная навигация — неконсистентность с macOS / Windows',
-    desc: 'Стандартный элемент Eclipse PreferenceDialog для навигации по истории. На одностраничном Security-экране не несёт функции — визуальный шум.',
-    tags: [{ label: 'Aesthetic and Minimalist Design', url: 'https://www.nngroup.com/articles/aesthetic-minimalist-design/' }]
-  },
-  {
-    id: 12, section: 1, displayNum: '12', severity: 'minor',
-    x: 95, y: 7.8,
-    title: 'Видимость доп. меню',
-    desc: 'Resize tree и Key Scrolling спрятаны от пользователей.',
-    tags: [{ label: 'Memory Recognition', url: 'https://www.nngroup.com/articles/recognition-and-recall/' }]
-  },
-  {
-    id: 13, section: 1, displayNum: '13', severity: 'minor',
-    x: 8.0, y: 96.3,
-    title: 'Длительность времени на поиск Security',
-    desc: 'Пользователь с исследования смог найти Security только через поиск. Вынести в отдельное меню? Конфликт решения с Eclipse IDE.',
-    tags: [{ label: "Jakob's Law", url: 'https://lawsofux.com/jakobs-law/' }]
-  },
+// ─── OUTCOMES_I18N ───
+const OUTCOMES_I18N = {
+  ru: [
+    { num: 1, title: 'Первичная настройка безопасности — из 20+ минут в 3 шага', desc: 'Пользователь открывает Security, видит статус «Not configured», нажимает Set password, задаёт пароль в одном диалоге. Без пустых wizard-шагов, без трёх слоёв модальных окон, без поиска нужной кнопки среди равнозначных элементов.' },
+    { num: 2, title: 'Ноль ложного чувства безопасности', desc: 'Статус-индикатор явно показывает настроена защита или нет. Пользователь больше не думает что данные защищены мастер-паролем когда они зашифрованы публично доступным DES-ключом.' },
+    { num: 3, title: 'Снижение риска случайной потери credentials', desc: 'Деструктивное действие изолировано в отдельную секцию с описанием последствий. Альтернативный путь удаления через Eclipse Viewer закрыт — кнопка заменена на ссылку Advanced storage settings. Один путь удаления вместо двух.' },
+    { num: 4, title: 'Осознанный выбор метода шифрования', desc: 'Методы визуально дифференцированы: Recommended для Master Password, Headless для Automation. Пользователь не выберет небезопасный метод случайно — не прочитав описание.' },
+    { num: 5, title: 'Предупреждение о непереносимости до действия, а не после', desc: 'Баннер о привязке к ОС видимый с первого экрана. Пользователь узнаёт об ограничении до настройки, а не при смене машины когда credentials уже потеряны.' },
+    { num: 6, title: 'Задание пароля — 1 диалог вместо 3 экранов', desc: 'Change Password wizard с двумя пустыми шагами заменён на один диалог с видимыми требованиями к паролю, объяснением ценности и полем для подсказки восстановления. Три клика вместо восьми.' },
+    { num: 7, title: 'Интерфейс объясняет себя сам', desc: 'Новые тексты (UX writing) для каждого элемента: описания методов, пояснения к disabled-кнопкам, конкретный перечень что входит в шифрование вместо абстрактного «credentials». Пользователь понимает экран с минимальным обращением к документации.', fullWidth: true },
+    { num: 8, title: 'Снижение нагрузки на поддержку', desc: 'Проблемы которые сейчас генерируют тикеты (#23084 — петля с паролем, #7211 — окно не закрывается, #19928 — Restore Defaults не работает) решены на уровне интерфейса. Пользователь который понимает экран не пишет в support.', business: true },
+    { num: 9, title: 'Доверие к продукту', desc: 'Security — экран который формирует отношение пользователя к безопасности всего продукта. Если экран настройки безопасности выглядит запутанным, содержит ложные элементы управления и скрывает предупреждения — пользователь переносит это недоверие на продукт в целом. Понятный Security-экран работает на восприятие DBeaver как надёжного инструмента для работы с production-данными.', business: true }
+  ],
+  en: [
+    { num: 1, title: 'Initial security setup — from 20+ minutes to 3 steps', desc: 'The user opens Security, sees the "Not configured" status, clicks Set password, and sets a password in a single dialog. No empty wizard steps, no three layers of modal windows, no searching for the right button among equal-weight elements.' },
+    { num: 2, title: 'Zero false sense of security', desc: 'The status indicator explicitly shows whether protection is configured or not. The user no longer thinks data is protected by a master password when it\'s encrypted with a publicly available DES key.' },
+    { num: 3, title: 'Reduced risk of accidental credential loss', desc: 'The destructive action is isolated in a separate section with consequence description. The alternative deletion path through Eclipse Viewer is closed — the button replaced with an Advanced storage settings link. One deletion path instead of two.' },
+    { num: 4, title: 'Informed encryption method choice', desc: 'Methods are visually differentiated: Recommended for Master Password, Headless for Automation. The user won\'t accidentally choose an insecure method — without reading the description.' },
+    { num: 5, title: 'Non-portability warning before action, not after', desc: 'The OS-binding banner is visible from the first screen. The user learns about the limitation before setup, not when switching machines after credentials are already lost.' },
+    { num: 6, title: 'Password setup — 1 dialog instead of 3 screens', desc: 'The Change Password wizard with two empty steps is replaced by a single dialog with visible password requirements, value explanation, and a recovery hint field. Three clicks instead of eight.' },
+    { num: 7, title: 'The interface explains itself', desc: 'New copy (UX writing) for every element: method descriptions, explanations for disabled buttons, specific list of what\'s encrypted instead of abstract "credentials." The user understands the screen with minimal reference to documentation.', fullWidth: true },
+    { num: 8, title: 'Reduced support load', desc: 'Issues that currently generate tickets (#23084 — password loop, #7211 — window won\'t close, #19928 — Restore Defaults broken) are solved at the interface level. A user who understands the screen doesn\'t write to support.', business: true },
+    { num: 9, title: 'Product trust', desc: 'Security is the screen that shapes the user\'s attitude toward the entire product\'s security. If the security settings screen looks confusing, contains false controls, and hides warnings — the user transfers that distrust to the product as a whole. A clear Security screen reinforces perception of DBeaver as a reliable tool for working with production data.', business: true }
+  ]
+};
 
-  // ─── Screen 2: See what secured data was saved ───
-  {
-    id: 14, section: 2, displayNum: '1', severity: 'critical',
-    x: 38, y: 18,
-    title: 'Конфликт ожидание / реальность',
-    desc: 'DBeaver в документации пишет что это «Advanced mode» — но кнопка на основном экране без пометки и не совпадает по названию.',
-    tags: []
-  },
-  {
-    id: 15, section: 2, displayNum: '2', severity: 'critical',
-    x: 70, y: 32,
-    title: 'Advanced mode — конфликт документации',
-    desc: 'В технической документации название Advanced mode. Конфликт между документацией и UI. Гипотеза: для продвинутого пользователя DBeaver он, возможно, бесполезен — нельзя прочитать значения, нельзя понять что за узлы в дереве, нельзя выборочно пересохранить конкретное подключение. «Почему я не могу кликнуть и посмотреть пароль?» — интервью.',
-    tags: []
-  },
-  {
-    id: 16, section: 2, displayNum: '2', severity: 'major',
-    x: 8, y: 28,
-    title: 'Узлы дерева непонятны пользователям',
-    desc: 'Внутренние идентификаторы Eclipse-платформы (org.eclipse.core.net, org.eclipse.equinox.sec) — технические названия, не предназначенные для конечного пользователя.',
-    tags: []
-  },
-  {
-    id: 17, section: 2, displayNum: '3', severity: 'major',
-    x: 62, y: 90,
-    title: 'Restore Default — не ясен результат',
-    desc: 'Пользователь не видит результата действия кнопки Restore Default.',
-    tags: []
-  },
-  {
-    id: 18, section: 2, displayNum: '4', severity: 'critical',
-    x: 90, y: 74,
-    title: 'Delete — критический конфликт, угроза удаления данных',
-    desc: 'Delete здесь удаляет мастер-пароль в обход основного флоу. После рестарта пароль пропадает. Найдено два деструктивных пути к одному результату — с разным уровнем контекста и защиты. Кнопка Delete на основном экране воспринимается как один из первых элементов интерфейса, но удаляет всё содержимое secure storage.',
-    tags: []
-  },
-
-  // ─── Screen 3: Advanced ───
-  {
-    id: 19, section: 3, displayNum: '1', severity: 'critical',
-    x: 79, y: 20,
-    title: 'Eclipse экран не для пользователей',
-    desc: 'Служебный Eclipse Equinox для разработчиков плагинов. Обычный пользователь не может осмысленно выбрать алгоритм шифрования. «Зачем столько алгоритмов?» — интервью',
-    tags: []
-  },
-  {
-    id: 20, section: 3, displayNum: '2', severity: 'major',
-    x: 66, y: 83,
-    title: '4 кнопки для одного дропдауна',
-    desc: 'Restore Defaults, Apply, Cancel, OK — избыточно для управления единственным дропдауном.',
-    tags: []
-  },
-
-  // ─── Screen 4: Change Password Step 1 ───
-  {
-    id: 21, section: 4, displayNum: '1', severity: 'critical',
-    x: 42, y: 27,
-    title: '«Old Password» без контекста — конфликт',
-    desc: 'По умолчанию мастер-пароль не задан пользователем — данные шифруются встроенным DES-ключом. Wizard говорит «decrypting with old master password», хотя пользователь никакого пароля не задавал и не понимает контекст. Влияние: замешательство на первом же шаге, потеря доверия к Security в DBeaver.',
-    tags: []
-  },
-  {
-    id: 22, section: 4, displayNum: '2', severity: 'major',
-    x: 47, y: 58,
-    title: 'Шаг без действия',
-    desc: 'Паттерн wizard предполагает осмысленное действие на каждом шаге. Step 1 и Step 2 содержат только пояснительный текст — пользователь дважды нажимает Next, ничего не сделав. Wizard стал обёрткой без функции.',
-    tags: []
-  },
-
-  // ─── Screen 5: Change Password Step 2 ───
-  {
-    id: 23, section: 5, displayNum: '3', severity: 'major',
-    x: 48, y: 58,
-    title: 'Шаг без действия',
-    desc: 'Та же проблема, что и на Step 1: только пояснительный текст, никакого ввода или решения. Wizard превращается в обёртку.',
-    tags: []
-  },
-
-  // ─── Screen 6: Change Password Step 3 ───
-  {
-    id: 24, section: 6, displayNum: '4', severity: 'critical',
-    x: 38, y: 37,
-    title: 'Нет индикатора сложности пароля',
-    desc: 'Password + Confirm Password без password strength indicator. Администратор может задать политику (минимальная длина, символы, mixed case), но пользователь требований не видит — узнаёт их через ошибку валидации.',
-    tags: []
-  },
-  {
-    id: 25, section: 6, displayNum: '5', severity: 'major',
-    x: 75, y: 17,
-    title: 'Три слоя модальных окон',
-    desc: 'Preferences → Wizard (Step 2 виден за диалогом) → Set password dialog. Пользователь видит три слоя одновременно, каждый со своим набором кнопок. Потеря контекста. NN/g: «Stacking modals compounds the interruption.»',
-    tags: []
-  },
-  {
-    id: 26, section: 6, displayNum: '6', severity: 'major',
-    x: 27, y: 44,
-    title: 'Объяснение ценности — на 3-м уровне (нарушена иерархия)',
-    desc: '«Set master password to save secure information» — единственное место во всём интерфейсе, где объясняется зачем нужен мастер-пароль. Лежит внутри модального окна внутри wizard внутри Preferences. Влияние: пользователь не понимает ценность фичи до момента, когда уже решил ей воспользоваться.',
-    tags: []
-  }
-];
+// ─── Active data references (reassigned on lang switch) ───
+let SECTIONS = SECTIONS_I18N[currentLang];
+let FINDINGS = FINDINGS_I18N[currentLang];
+let SOLUTIONS = SOLUTIONS_I18N[currentLang];
+let SOLVED_PROBLEMS = SOLVED_PROBLEMS_I18N[currentLang];
+let FLOW_SCREENS = FLOW_SCREENS_I18N[currentLang];
 
 function renderTags(tags) {
   return tags.filter(t => t.url || t.label.toLowerCase().includes('requires dev')).map(t => t.url
@@ -1587,11 +2115,6 @@ document.addEventListener('keydown', (e) => {
 });
 
 // Flow step switching
-const FLOW_SCREENS = {
-  1: { src: 'dbeaver-ux-audit-assets/flow-screen-1.png', alt: 'Security status', caption: 'Экран 1 из 3 — Security status' },
-  2: { src: 'dbeaver-ux-audit-assets/flow-screen-2.png', alt: 'Set password', caption: 'Экран 2 из 3 — Set password' },
-  3: { src: 'dbeaver-ux-audit-assets/flow-screen-3.png', alt: 'Подтверждение', caption: 'Экран 3 из 3 — Подтверждение' }
-};
 document.addEventListener('click', (e) => {
   const step = e.target.closest('.flow-step[data-flow-step]');
   if (!step) return;
@@ -1607,159 +2130,13 @@ document.addEventListener('click', (e) => {
 });
 
 
-// ─── Solutions Data ───
-const SOLUTIONS = [
-  {
-    id: 's1', num: '1', severity: 'critical',
-    x: 82, y: 10,
-    title: 'Security status с бейджем «Not configured»',
-    before: 'Radio-кнопка выбрана по умолчанию — ложное ощущение что пароль активен',
-    after: 'Первый элемент экрана — явный статус Active / Not configured',
-    tags: [
-      { label: 'wiki/Project-security', url: 'https://github.com/dbeaver/dbeaver/wiki/Project-security' },
-      { label: 'Тикет #37306', url: 'https://github.com/dbeaver/dbeaver/issues/37306' },
-      { label: 'NN/Group #1 Visibility of system status' }
-    ]
-  },
-  {
-    id: 's2', num: '2', severity: 'critical',
-    x: 55, y: 20,
-    title: 'Warning-баннер с ⚠ иконкой',
-    before: '«Нельзя перенести на другую ОС» — мелкий серый шрифт',
-    after: 'Визуальный баннер с иконкой ⚠ и болдом, выше карточек методов',
-    tags: [
-      { label: 'wiki/Managing-Master-Password', url: 'https://github.com/dbeaver/dbeaver/wiki/Managing-Master-Password' },
-      { label: 'NN/Group #1, #5' },
-      { label: 'requires dev' }
-    ]
-  },
-  {
-    id: 's3', num: '3', severity: 'major',
-    x: 25, y: 17,
-    title: 'Encryption method — иерархия action-first',
-    before: 'Сначала «что шифровать», потом «как» — без контекста',
-    after: 'Сначала выбор метода, потом скоуп. Action-first иерархия',
-    tags: [
-      { label: 'Information Architecture' }
-    ]
-  },
-  {
-    id: 's4', num: '4', severity: 'major',
-    x: 55, y: 30,
-    title: 'Master Password — карточка с Set/Recover',
-    before: '3 кнопки в ряд, Recover disabled без tooltip',
-    after: 'Set + Recover внутри карточки метода, пояснение под кнопкой',
-    tags: [
-      { label: 'Тикет #23084', url: 'https://github.com/dbeaver/dbeaver/issues/23084' },
-      { label: 'dbeaver.com/Managing-Master-Password', url: 'https://dbeaver.com/docs/dbeaver/Managing-Master-Password/' },
-      { label: 'NN/Group #1, #10' }
-    ]
-  },
-  {
-    id: 's5', num: '5', severity: 'critical',
-    x: 78, y: 45,
-    title: 'Automation отделена с бейджем «Headless»',
-    before: 'Визуально идентична безопасным методам, «Not secure» в тексте',
-    after: 'Визуально отделена, бейдж Headless, болд на «server environments only»',
-    tags: [
-      { label: 'dbeaver.com/Automation-Security', url: 'https://dbeaver.com/docs/dbeaver/Admin-Manage-Connections/#automation-security' },
-      { label: 'NN/Group #5 Error prevention' }
-    ]
-  },
-  {
-    id: 's6', num: '6', severity: 'critical',
-    x: 35, y: 57,
-    title: 'Global config — статичный элемент',
-    before: 'Интерактивный чекбокс, при снятии — диалог ошибки',
-    after: 'Disabled чекбокс с текстом «always encrypted» и ссылкой More info',
-    tags: [
-      { label: 'Интервью: «Зачем делать её активной?»' },
-      { label: 'NN/Group #2, #5' },
-      { label: 'Закон Гештальта' }
-    ]
-  },
-  {
-    id: 's7', num: '7', severity: 'critical',
-    x: 35, y: 87,
-    title: 'Убрана кнопка «See what secured data»',
-    before: 'Кнопка без пометки Advanced открывала Eclipse Viewer с Delete',
-    after: 'Текстовая ссылка «Advanced storage settings...» внизу экрана',
-    tags: [
-      { label: 'Eclipse docs: «mostly for troubleshooting»' },
-      { label: 'dbeaver.com/Security', url: 'https://dbeaver.com/docs/dbeaver/Security/' },
-      { label: 'NN/Group #2, #5' }
-    ]
-  },
-  {
-    id: 's8', num: '8', severity: 'critical',
-    x: 40, y: 77,
-    title: 'Delete secure storage — изолированная секция',
-    before: 'Delete в одном ряду с Change и Recover, одинакового веса',
-    after: 'Отдельная секция с заголовком, описанием последствий и предупреждением',
-    tags: [
-      { label: 'Тикет #23084', url: 'https://github.com/dbeaver/dbeaver/issues/23084' },
-      { label: 'Тикет #7211', url: 'https://github.com/dbeaver/dbeaver/issues/7211' },
-      { label: 'NN/Group #5 Error prevention' }
-    ]
-  },
-  {
-    id: 's9', num: '9', severity: 'major',
-    x: 30, y: 70,
-    title: 'Apply с пояснением',
-    before: '4 кнопки: Restore Defaults (не работает) + Apply + Cancel + Apply and Close',
-    after: 'Apply внутри контента с пояснением. Restore Defaults убрана. ⚠ Требует согласования с разработкой — потенциальный конфликт с общей системой Preferences Eclipse',
-    tags: [
-      { label: 'Тикет #19928', url: 'https://github.com/dbeaver/dbeaver/issues/19928' },
-      { label: 'Тикет #12605', url: 'https://github.com/dbeaver/dbeaver/issues/12605' },
-      { label: 'NN/Group #1' },
-      { label: 'requires dev' }
-    ]
-  },
-  {
-    id: 's10', num: '10', severity: 'minor',
-    x: 93, y: 7,
-    title: 'Навигация — стрелки убраны',
-    before: 'Стрелки ← → + скрытое меню с нулевой обнаруживаемостью',
-    after: 'Стрелки убраны. Меню ⋮ осталось видимым',
-    tags: [
-      { label: 'NN/Group #8 Aesthetic minimalism' },
-      { label: '#6 Recognition > recall' },
-      { label: 'requires dev' }
-    ]
-  }
-];
-
-const SOLVED_PROBLEMS = {
-  critical: {
-    label: '6 критичных решено',
-    items: [
-      { problem: 'Нет статуса системы — Radio выбрана, но пароль не задан. Данные на DES-ключе из исходного кода.', solution: 'Security status с бейджем Not configured / Active — первый элемент экрана', evidence: 'wiki/Project-security, тикет #37306, интервью' },
-      { problem: 'Предупреждение скрыто в тексте — «Нельзя перенести на другую ОС» — мелкий серый шрифт', solution: 'Warning-баннер с иконкой, болд на ключевых словах, выше карточек методов', evidence: 'wiki/Managing-Master-Password · requires dev' },
-      { problem: 'Eclipse-экран как основной элемент — Кнопка без пометки Advanced открывает технический Viewer', solution: 'Заменена на ссылку «Advanced storage settings...» внизу экрана', evidence: 'Eclipse: «mostly for troubleshooting», DBeaver: «Advanced mode»' },
-      { problem: 'Automation без визуального барьера — «Not secure» только в описании', solution: 'Отделена визуально, бейдж Headless, болд на «server environments only»', evidence: 'dbeaver.com/Automation-Security, интервью' },
-      { problem: 'Delete рядом с Change — Три кнопки в ряд, одинаковый вес', solution: 'Изолированная секция Delete secure storage с описанием и предупреждением', evidence: 'Тикеты #23084, #7211' },
-      { problem: 'Ложный чекбокс — Global configuration нельзя снять → диалог ошибки', solution: 'Disabled чекбокс с текстом «always encrypted» и ссылкой More info', evidence: 'Интервью: «Зачем делать её активной?»' }
-    ]
-  },
-  major: {
-    label: '3 значимых решено',
-    items: [
-      { problem: 'Чекбоксы без разницы — Global config и DB credentials — нет иерархии', solution: 'Global config = статичный текст. DB credentials = чекбокс с описанием', evidence: 'Интервью, закон Гештальта' },
-      { problem: 'Три метода без иерархии — Одинаковый визуальный вес', solution: 'Карточки с бейджами Recommended / Headless. Порядок action-first', evidence: 'Интервью: «Всё в одну кучу»' },
-      { problem: 'Recover disabled без объяснений — Нет tooltip, пользователь не знает условий', solution: 'Пояснение: «Recovery available if questions were set during creation»', evidence: 'Тикет #23084' }
-    ]
-  },
-  minor: {
-    label: '1 минорная решена',
-    items: [
-      { problem: 'Стрелки навигации — Легаси Eclipse, не нужны на Security-экране', solution: 'Убраны', evidence: 'requires dev' }
-    ]
-  }
-};
-
+// ─── Solutions Data & Render ───
 function renderSolutions() {
   const container = document.getElementById('solutions-section');
+  const t = UI_TEXT[currentLang];
   const severityOrder = ['critical', 'major', 'minor'];
+  const flowSteps = FLOW_STEPS_I18N[currentLang];
+  const outcomes = OUTCOMES_I18N[currentLang];
 
   const tableHtml = severityOrder.map(sev => {
     const group = SOLVED_PROBLEMS[sev];
@@ -1772,9 +2149,9 @@ function renderSolutions() {
         </div>
         <div class="severity-group-body">
           <div class="solved-row solved-row-header">
-            <span>Проблема</span>
-            <span>Решение</span>
-            <span>Доказательства</span>
+            <span>${t['solutions.table.problem']}</span>
+            <span>${t['solutions.table.solution']}</span>
+            <span>${t['solutions.table.evidence']}</span>
           </div>
           ${group.items.map(item => `
             <div class="solved-row">
@@ -1792,48 +2169,48 @@ function renderSolutions() {
     <div class="hairline" style="margin-top:60px"></div>
 
     <header class="solutions-header">
-      <span class="audit-label">Design Solutions</span>
-      <h2 class="audit-title">Дизайн-решения и обоснования</h2>
-      <p class="audit-subtitle">Редизайн решает 10 проблем на основном экране Security — 6 критичных, 3 значимых и 1 минорную. Помимо структурных изменений, предложены новые тексты интерфейса (UX writing): описания методов шифрования, пояснения к кнопкам, предупреждения о последствиях действий — чтобы пользователь понимал что происходит на каждом шаге с минимальным обращением к документации. Остальные проблемы относятся к вложенным экранам (Change Password wizard, Eclipse Secure Storage Viewer) и платформенным ограничениям Eclipse RCP. Они разобраны в рамках UX-аудита с обоснованиями и ссылками на документацию, но их реализация выходит за рамки редизайна одного экрана и требует отдельных задач разработки. Каждое решение обосновано пользовательским исследованием, тикетами GitHub и документацией.</p>
+      <span class="audit-label">${t['solutions.label']}</span>
+      <h2 class="audit-title">${t['solutions.title']}</h2>
+      <p class="audit-subtitle">${t['solutions.subtitle']}</p>
       <div class="solutions-metrics">
         <div class="metric">
           <div class="metric-value critical">6</div>
-          <div class="metric-label">критичных</div>
+          <div class="metric-label">${t['solutions.metrics.critical']}</div>
         </div>
         <div class="metric">
           <div class="metric-value major">3</div>
-          <div class="metric-label">значимых</div>
+          <div class="metric-label">${t['solutions.metrics.major']}</div>
         </div>
         <div class="metric">
           <div class="metric-value minor">1</div>
-          <div class="metric-label">минорная</div>
+          <div class="metric-label">${t['solutions.metrics.minor']}</div>
         </div>
         <div class="metric">
           <div class="metric-value">10</div>
-          <div class="metric-label">проблем решено</div>
+          <div class="metric-label">${t['solutions.metrics.solved']}</div>
         </div>
       </div>
       <div class="insight-card">
-        <h3 class="insight-title">Изменение иерархии: action-first вместо data-first</h3>
-        <p>В текущем интерфейсе секция «Encrypted Data» (что шифровать) расположена выше «Encryption Method» (как шифровать). Это логика разработчика: сначала определи скоуп данных, потом выбери инструмент. Для инженера который понимает архитектуру системы — это естественно. Но для дата-инженера который хочет «зайти быстро, настроить и забыть» — нет.</p>
-        <p>Исследование подтвердило: респондент не смог интерпретировать чекбоксы «Global configuration» и «Database connection credentials» пока не разобрался в методах шифрования. Понимание «что шифровать» оказалось невозможным без понимания «как шифровать».</p>
-        <p>В предложенном решении порядок изменён на пользовательский: сначала Encryption method (первичное решение, определяющее доступные действия), затем What to encrypt (вторичная детализация).</p>
+        <h3 class="insight-title">${t['solutions.insight.title']}</h3>
+        <p>${t['solutions.insight.p1']}</p>
+        <p>${t['solutions.insight.p2']}</p>
+        <p>${t['solutions.insight.p3']}</p>
       </div>
     </header>
 
     <div class="hairline"></div>
 
     <section class="ba-section">
-      <span class="ba-label">Before / After</span>
+      <span class="ba-label">${t['solutions.ba.label']}</span>
       <div class="ba-grid">
         <div>
-          <p class="ba-col-label">Before — текущий интерфейс DBeaver</p>
+          <p class="ba-col-label">${t['solutions.ba.before']}</p>
           <div class="ba-img-wrap">
             <img src="dbeaver-ux-audit-assets/solution-before.png" alt="Before" loading="lazy">
           </div>
         </div>
         <div>
-          <p class="ba-col-label">After — предложенный редизайн</p>
+          <p class="ba-col-label">${t['solutions.ba.after']}</p>
           <div class="ba-img-wrap" id="after-screenshot">
             <img src="dbeaver-ux-audit-assets/solution-after.png" alt="After" loading="lazy">
           </div>
@@ -1845,8 +2222,8 @@ function renderSolutions() {
 
     <section class="audit-section">
       <div class="section-header">
-        <span class="section-number">РЕШЕНИЯ</span>
-        <h2 class="section-name">Ключевые изменения</h2>
+        <span class="section-number">${t['solutions.changes.label']}</span>
+        <h2 class="section-name">${t['solutions.changes.name']}</h2>
       </div>
       <div class="section-content">
         <div class="screenshot-wrap">
@@ -1867,11 +2244,11 @@ function renderSolutions() {
               <h3 class="finding-title">${s.title}</h3>
               <div class="solution-before-after">
                 <div class="solution-ba-block">
-                  <div class="solution-ba-label before">Было</div>
+                  <div class="solution-ba-label before">${t['solutions.was']}</div>
                   <p class="solution-ba-text">${s.before}</p>
                 </div>
                 <div class="solution-ba-block">
-                  <div class="solution-ba-label after">Стало</div>
+                  <div class="solution-ba-label after">${t['solutions.became']}</div>
                   <p class="solution-ba-text">${s.after}</p>
                 </div>
               </div>
@@ -1887,8 +2264,8 @@ function renderSolutions() {
     <div class="hairline"></div>
 
     <section class="solved-table-section">
-      <span class="audit-label">ИТОГОВАЯ ТАБЛИЦА РЕШЁННЫХ ПРОБЛЕМ</span>
-      <h2 class="solved-table-title" style="margin-top:16px">Решённые UX-проблемы</h2>
+      <span class="audit-label">${t['solutions.table.label']}</span>
+      <h2 class="solved-table-title" style="margin-top:16px">${t['solutions.table.title']}</h2>
       ${tableHtml}
     </section>
 
@@ -1896,19 +2273,19 @@ function renderSolutions() {
 
     <section class="conclusion-section">
       <div class="conclusion-card">
-        <h2 class="conclusion-title">Вывод</h2>
-        <p class="conclusion-text">Предложенный интерфейс решает 10 проблем на основном экране Security — 6 критичных, 3 значимых и 1 минорную. Каждое решение обосновано данными: пользовательское исследование, тикеты GitHub, официальная документация DBeaver и Eclipse. Четыре решения требуют подтверждения разработчика и помечены соответственно.</p>
+        <h2 class="conclusion-title">${t['solutions.conclusion.title']}</h2>
+        <p class="conclusion-text">${t['solutions.conclusion.text']}</p>
         <div class="jobs-grid">
           <div class="job-card">
-            <h4 class="job-title">✓ Job 1 — быстро настроить</h4>
-            <p class="job-desc">Security status → Master Password → Set password → Apply and close. Три осмысленных шага вместо шести точек замешательства.</p>
+            <h4 class="job-title">${t['solutions.conclusion.job1.title']}</h4>
+            <p class="job-desc">${t['solutions.conclusion.job1.desc']}</p>
           </div>
           <div class="job-card">
-            <h4 class="job-title">✓ Job 2 — понять ценность</h4>
-            <p class="job-desc">Security status сразу говорит «encrypted with default key — configure for stronger protection». Ценность на первом экране.</p>
+            <h4 class="job-title">${t['solutions.conclusion.job2.title']}</h4>
+            <p class="job-desc">${t['solutions.conclusion.job2.desc']}</p>
           </div>
         </div>
-        <a class="conclusion-figma-link" href="https://www.figma.com/design/fye36sRLiAdEAWCDwP4hIx/Test-assignment.-Security-page?node-id=70-324&t=GcWwthzBG4t5Pfpc-1" target="_blank" rel="noopener">Посмотреть полное исследование в Figma ↗</a>
+        <a class="conclusion-figma-link" href="https://www.figma.com/design/fye36sRLiAdEAWCDwP4hIx/Test-assignment.-Security-page?node-id=70-324&t=GcWwthzBG4t5Pfpc-1" target="_blank" rel="noopener">${t['solutions.conclusion.figma']}</a>
       </div>
     </section>
 
@@ -1916,51 +2293,38 @@ function renderSolutions() {
 
     <section class="flow-section" style="padding:60px 0 48px">
       <div class="section-header">
-        <span class="section-number">USER FLOW · SET PASSWORD</span>
-        <h2 class="section-name">Новый флоу задания пароля</h2>
-        <p class="section-desc">Сравнение текущего wizard-флоу из 3 модальных слоёв с новым одношаговым диалогом. Каждый экран — реальный wireframe с обоснованием.</p>
+        <span class="section-number">${t['flow.label']}</span>
+        <h2 class="section-name">${t['flow.title']}</h2>
+        <p class="section-desc">${t['flow.desc']}</p>
       </div>
 
       <div class="section-content">
         <div class="screenshot-wrap">
           <div class="screenshot-container" id="flow-screenshot">
-            <img src="dbeaver-ux-audit-assets/flow-screen-1.png" alt="Security status" loading="lazy" id="flow-img">
+            <img src="dbeaver-ux-audit-assets/flow-screen-1.png" alt="${FLOW_SCREENS[1].alt}" loading="lazy" id="flow-img">
           </div>
-          <p class="screenshot-caption" id="flow-caption">Экран 1 из 3 — Security status</p>
+          <p class="screenshot-caption" id="flow-caption">${FLOW_SCREENS[1].caption}</p>
         </div>
         <div class="findings-grid">
-          <div class="flow-step active" data-flow-step="1">
+          ${flowSteps.map((step, i) => `
+          <div class="flow-step${i === 0 ? ' active' : ''}" data-flow-step="${step.num}">
             <div class="flow-step-header">
-              <div class="flow-step-num">1</div>
-              <div class="flow-step-title">Security status</div>
+              <div class="flow-step-num">${step.num}</div>
+              <div class="flow-step-title">${step.title}</div>
             </div>
-            <p class="flow-step-desc">Новый Security-экран. Пользователь видит Security status: Not configured. Понимает что нужно настроить. Нажимает Set password внутри карточки Master Password. Один клик — понятное действие.</p>
+            <p class="flow-step-desc">${step.desc}</p>
           </div>
-          <div class="flow-step" data-flow-step="2">
-            <div class="flow-step-header">
-              <div class="flow-step-num">2</div>
-              <div class="flow-step-title">Set password</div>
-            </div>
-            <p class="flow-step-desc">Диалог Set DBeaver Ultimate master password. Один диалог, не три слоя. Внутри всё что нужно: поля Password и Confirm Password, видимые требования к паролю, поле Password hint. Пользователь делает всё в одном месте.</p>
-          </div>
-          <div class="flow-step" data-flow-step="3">
-            <div class="flow-step-header">
-              <div class="flow-step-num">3</div>
-              <div class="flow-step-title">Подтверждение</div>
-            </div>
-            <p class="flow-step-desc">Возврат на Security-экран. Статус обновился. Кнопка Set password сменилась на Change password и Recover password. Пользователь видит что действие выполнено.</p>
-          </div>
-
+          `).join('')}
 
           <div class="flow-conclusion">
-            <h2 class="conclusion-title">Вывод</h2>
-            <p>Замена wizard на простой диалог для задания пароля соответствует Eclipse UI Guidelines:</p>
-            <blockquote>«A wizard should be used if there are many steps in the task, and they must be completed in a specific order»<br><span style="font-style:normal;font-size:13px;color:var(--text-muted)">— Eclipse UI Guidelines v2, раздел Wizards</span></blockquote>
-            <p>Задание мастер-пароля — одношаговая задача (ввод + подтверждение), не требующая wizard-паттерна. Текущая реализация использует wizard с двумя пустыми шагами, нарушая рекомендации Eclipse.</p>
+            <h2 class="conclusion-title">${t['flow.conclusion.title']}</h2>
+            <p>${t['flow.conclusion.intro']}</p>
+            <blockquote>${t['flow.conclusion.quote']}<br><span style="font-style:normal;font-size:13px;color:var(--text-muted)">${t['flow.conclusion.quoteSource']}</span></blockquote>
+            <p>${t['flow.conclusion.text']}</p>
             <div class="flow-sources">
-              <div class="flow-sources-label">Источники</div>
+              <div class="flow-sources-label">${t['flow.sources.label']}</div>
               <a href="https://eclipse.org/articles/Article-UI-Guidelines/v200202/Contents.html" target="_blank" rel="noopener">eclipse.org/articles/Article-UI-Guidelines/v200202/Contents.html ↗</a>
-              <a href="https://eclipse-platform.github.io/ui-best-practices/" target="_blank" rel="noopener">eclipse-platform.github.io/ui-best-practices/ — раздел 8.3 Wizards ↗</a>
+              <a href="https://eclipse-platform.github.io/ui-best-practices/" target="_blank" rel="noopener">eclipse-platform.github.io/ui-best-practices/ — ${currentLang === 'ru' ? 'раздел' : 'section'} 8.3 Wizards ↗</a>
             </div>
           </div>
         </div>
@@ -1970,55 +2334,25 @@ function renderSolutions() {
     <div class="hairline"></div>
 
     <section class="outcomes-section">
-      <span class="audit-label">EXPECTED OUTCOMES</span>
-      <h2 class="audit-title" style="margin-top:16px">Предполагаемый результат</h2>
+      <span class="audit-label">${t['outcomes.label']}</span>
+      <h2 class="audit-title" style="margin-top:16px">${t['outcomes.title']}</h2>
       <div class="outcomes-grid">
+        ${outcomes.map(o => {
+          if (o.business && o.num === 8) {
+            return `<div class="outcome-divider"><span class="outcome-divider-text">${t['outcomes.business']}</span></div>` + `
         <div class="outcome-card">
-          <div class="outcome-num">1</div>
-          <h3 class="outcome-title">Первичная настройка безопасности — из 20+ минут в 3 шага</h3>
-          <p class="outcome-desc">Пользователь открывает Security, видит статус «Not configured», нажимает Set password, задаёт пароль в одном диалоге. Без пустых wizard-шагов, без трёх слоёв модальных окон, без поиска нужной кнопки среди равнозначных элементов.</p>
-        </div>
-        <div class="outcome-card">
-          <div class="outcome-num">2</div>
-          <h3 class="outcome-title">Ноль ложного чувства безопасности</h3>
-          <p class="outcome-desc">Статус-индикатор явно показывает настроена защита или нет. Пользователь больше не думает что данные защищены мастер-паролем когда они зашифрованы публично доступным DES-ключом.</p>
-        </div>
-        <div class="outcome-card">
-          <div class="outcome-num">3</div>
-          <h3 class="outcome-title">Снижение риска случайной потери credentials</h3>
-          <p class="outcome-desc">Деструктивное действие изолировано в отдельную секцию с описанием последствий. Альтернативный путь удаления через Eclipse Viewer закрыт — кнопка заменена на ссылку Advanced storage settings. Один путь удаления вместо двух.</p>
-        </div>
-        <div class="outcome-card">
-          <div class="outcome-num">4</div>
-          <h3 class="outcome-title">Осознанный выбор метода шифрования</h3>
-          <p class="outcome-desc">Методы визуально дифференцированы: Recommended для Master Password, Headless для Automation. Пользователь не выберет небезопасный метод случайно — не прочитав описание.</p>
-        </div>
-        <div class="outcome-card">
-          <div class="outcome-num">5</div>
-          <h3 class="outcome-title">Предупреждение о непереносимости до действия, а не после</h3>
-          <p class="outcome-desc">Баннер о привязке к ОС видимый с первого экрана. Пользователь узнаёт об ограничении до настройки, а не при смене машины когда credentials уже потеряны.</p>
-        </div>
-        <div class="outcome-card">
-          <div class="outcome-num">6</div>
-          <h3 class="outcome-title">Задание пароля — 1 диалог вместо 3 экранов</h3>
-          <p class="outcome-desc">Change Password wizard с двумя пустыми шагами заменён на один диалог с видимыми требованиями к паролю, объяснением ценности и полем для подсказки восстановления. Три клика вместо восьми.</p>
-        </div>
-        <div class="outcome-card full-width">
-          <div class="outcome-num">7</div>
-          <h3 class="outcome-title">Интерфейс объясняет себя сам</h3>
-          <p class="outcome-desc">Новые тексты (UX writing) для каждого элемента: описания методов, пояснения к disabled-кнопкам, конкретный перечень что входит в шифрование вместо абстрактного «credentials». Пользователь понимает экран с минимальным обращением к документации.</p>
-        </div>
-        <div class="outcome-divider"><span class="outcome-divider-text">Бизнес-результат</span></div>
-        <div class="outcome-card">
-          <div class="outcome-num">8</div>
-          <h3 class="outcome-title">Снижение нагрузки на поддержку</h3>
-          <p class="outcome-desc">Проблемы которые сейчас генерируют тикеты (#23084 — петля с паролем, #7211 — окно не закрывается, #19928 — Restore Defaults не работает) решены на уровне интерфейса. Пользователь который понимает экран не пишет в support.</p>
-        </div>
-        <div class="outcome-card">
-          <div class="outcome-num">9</div>
-          <h3 class="outcome-title">Доверие к продукту</h3>
-          <p class="outcome-desc">Security — экран который формирует отношение пользователя к безопасности всего продукта. Если экран настройки безопасности выглядит запутанным, содержит ложные элементы управления и скрывает предупреждения — пользователь переносит это недоверие на продукт в целом. Понятный Security-экран работает на восприятие DBeaver как надёжного инструмента для работы с production-данными.</p>
-        </div>
+          <div class="outcome-num">${o.num}</div>
+          <h3 class="outcome-title">${o.title}</h3>
+          <p class="outcome-desc">${o.desc}</p>
+        </div>`;
+          }
+          return `
+        <div class="outcome-card${o.fullWidth ? ' full-width' : ''}">
+          <div class="outcome-num">${o.num}</div>
+          <h3 class="outcome-title">${o.title}</h3>
+          <p class="outcome-desc">${o.desc}</p>
+        </div>`;
+        }).join('')}
       </div>
     </section>
   `;
@@ -2029,6 +2363,7 @@ function showSolutionTooltip(solutionId, dotEl) {
   const s = SOLUTIONS.find(s => s.id === solutionId);
   if (!s) return;
 
+  const t = UI_TEXT[currentLang];
   activeFindingId = solutionId;
 
   tooltipNum.textContent = s.num;
@@ -2036,7 +2371,7 @@ function showSolutionTooltip(solutionId, dotEl) {
   tooltipSeverity.textContent = SEVERITY[s.severity].label;
   tooltipSeverity.className = 'finding-severity ' + s.severity;
   tooltipTitle.textContent = s.title;
-  tooltipDesc.innerHTML = '<strong style="color:var(--text-muted)">Было:</strong> ' + s.before + '<br><strong style="color:var(--text-primary)">Стало:</strong> ' + s.after;
+  tooltipDesc.innerHTML = '<strong style="color:var(--text-muted)">' + t['solutions.was'] + ':</strong> ' + s.before + '<br><strong style="color:var(--text-primary)">' + t['solutions.became'] + ':</strong> ' + s.after;
   tooltipTags.innerHTML = renderTags(s.tags);
 
   tooltip.classList.add('visible');
@@ -2049,36 +2384,41 @@ function showSolutionTooltip(solutionId, dotEl) {
   if (card) card.classList.add('active');
 }
 
+// ─── Language switching ───
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('lang', lang);
+  document.documentElement.lang = lang;
+
+  SECTIONS = SECTIONS_I18N[lang];
+  FINDINGS = FINDINGS_I18N[lang];
+  SOLUTIONS = SOLUTIONS_I18N[lang];
+  SOLVED_PROBLEMS = SOLVED_PROBLEMS_I18N[lang];
+  FLOW_SCREENS = FLOW_SCREENS_I18N[lang];
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (UI_TEXT[lang][key]) el.textContent = UI_TEXT[lang][key];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.dataset.i18nHtml;
+    if (UI_TEXT[lang][key]) el.innerHTML = UI_TEXT[lang][key];
+  });
+
+  renderSections();
+  renderSolutions();
+  hideTooltip();
+
+  document.querySelectorAll('.lang-option').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
+  document.getElementById('lang-current').textContent = lang.toUpperCase();
+}
+
 // ─── Init ───
 renderSections();
 renderSolutions();
-
-// Lightbox
-const lightbox = document.createElement('div');
-lightbox.className = 'lightbox';
-lightbox.innerHTML = '<img>';
-document.body.appendChild(lightbox);
-const lightboxImg = lightbox.querySelector('img');
-
-document.addEventListener('click', (e) => {
-  if (e.target.tagName === 'IMG' && ((e.target.closest('.ba-img-wrap') && !e.target.closest('#after-screenshot-sticky')) || e.target.closest('#flow-screenshot'))) {
-    lightboxImg.src = e.target.src;
-    lightboxImg.alt = e.target.alt;
-    lightbox.classList.add('visible');
-    document.body.style.overflow = 'hidden';
-    return;
-  }
-});
-lightbox.addEventListener('click', () => {
-  lightbox.classList.remove('visible');
-  document.body.style.overflow = '';
-});
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && lightbox.classList.contains('visible')) {
-    lightbox.classList.remove('visible');
-    document.body.style.overflow = '';
-  }
-});
+if (currentLang !== 'ru') setLang(currentLang);
 
 </script>
 
@@ -2091,14 +2431,45 @@ window.addEventListener('scroll', () => {
 </script>
 
 <footer class="site-footer">
-  <p class="footer-thanks">Спасибо за просмотр</p>
-  <p class="footer-name">Анастасия Покатилова</p>
+  <p class="footer-thanks" data-i18n="footer.thanks">Спасибо за просмотр</p>
+  <p class="footer-name" data-i18n="footer.name">Анастасия Покатилова</p>
   <div class="footer-links">
     <a href="https://t.me/epic_amber" target="_blank" rel="noopener">Telegram ↗</a>
     <a href="https://www.linkedin.com/in/a-pokatilova/" target="_blank" rel="noopener">LinkedIn ↗</a>
-    <a href="https://a-pokatilova.space/" target="_blank" rel="noopener">Портфолио ↗</a>
+    <a href="https://a-pokatilova.space/" target="_blank" rel="noopener" data-i18n="footer.portfolio">Портфолио ↗</a>
   </div>
 </footer>
+
+<script>
+document.getElementById('theme-toggle').addEventListener('click', () => {
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  if (isLight) {
+    document.documentElement.removeAttribute('data-theme');
+    localStorage.setItem('theme', 'dark');
+  } else {
+    document.documentElement.setAttribute('data-theme', 'light');
+    localStorage.setItem('theme', 'light');
+  }
+});
+document.getElementById('lang-toggle').addEventListener('click', (e) => {
+  e.stopPropagation();
+  document.getElementById('lang-dropdown').classList.toggle('open');
+});
+document.getElementById('lang-current').addEventListener('click', (e) => {
+  e.stopPropagation();
+  document.getElementById('lang-dropdown').classList.toggle('open');
+});
+document.querySelectorAll('.lang-option').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    setLang(btn.dataset.lang);
+    document.getElementById('lang-dropdown').classList.remove('open');
+  });
+});
+document.addEventListener('click', () => {
+  document.getElementById('lang-dropdown').classList.remove('open');
+});
+</script>
 
 </body>
 </html>
